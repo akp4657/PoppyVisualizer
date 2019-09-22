@@ -175,7 +175,8 @@
 			let barSpacing = 1;
 			let barHeight = 100;
 			let topSpacing = 50;
-			
+            drawRectangles(drawCtx);
+            
 			// loop through the data and draw!
 			for(let i=0; i<audioData.length; i++) 
             { 
