@@ -1,4 +1,4 @@
-	"use strict";
+	'use strict';
 		
 		window.onload = init;
 		
@@ -43,6 +43,7 @@
 			setupCanvas();
 			setupUI();
 			update();
+            console.log("we in init");
 		}
 		
 		function setupWebaudio(){
@@ -89,6 +90,7 @@
 		
 		function setupUI()
         {
+            console.log("in setup UI");
 			playButton = document.querySelector("#playButton");
 			playButton.onclick = e => {
 				console.log(`audioCtx.state = ${audioCtx.state}`);
@@ -140,7 +142,15 @@
                 radiusLabel.innerHTML = sliderValue;
             }
 			
-			
+			//fullscreen button
+            let fullscreenButton = document.querySelector("#fullscreen");
+            console.log(fullscreenButton)
+            fullscreenButton.onclick = e =>
+            {
+                elem.webkitRequestFullscreen();
+            }
+            
+            
 			// if track ends
 			audioElement.onended =  _ => {
 				playButton.dataset.playing = "no";
