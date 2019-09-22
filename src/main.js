@@ -170,7 +170,7 @@
 			//analyserNode.getByteTimeDomainData(audioData); // waveform data
 			
 			// DRAW!
-			drawCtx.clearRect(0,0,800,600);  
+			//drawCtx.clearRect(0,0,800,600);  
 			let barWidth = 4;
 			let barSpacing = 1;
 			let barHeight = 100;
@@ -179,60 +179,66 @@
             
 			// loop through the data and draw!
 			for(let i=0; i<audioData.length; i++) 
-            { 
-                /* Drawing Circles */ 
+            {
                 let percent = audioData[i] / 255;
                 let maxRadius = 200;
                 let circleRadius = percent * maxRadius * sliderValue/2;
                 
-                //Red-ish medium-sized circles 
-                drawCtx.beginPath();
-                drawCtx.fillStyle = makeColor(255,111,111,.34 - percent/3.0); drawCtx.arc(canvasElement.width/2,canvasElement.height/2,circleRadius,0,2*Math.PI, false);
-                drawCtx.fill();
-                drawCtx.closePath();
+                drawCircles(drawCtx, circleRadius);
+//                /* Drawing Circles */ 
+//                let percent = audioData[i] / 255;
+//                let maxRadius = 200;
+//                let circleRadius = percent * maxRadius * sliderValue/2;
                 
-                // Bigger blue circle with more transparency
-                drawCtx.beginPath();
-                drawCtx.fillStyle = makeColor(0,0,255,.10 - percent/10.0); drawCtx.arc(canvasElement.width/2,canvasElement.height/2,circleRadius * 1.5,0,2*Math.PI, false);
-                drawCtx.fill();
-                drawCtx.closePath();
-                
-                // Smaller, yellow circles
-                drawCtx.beginPath();
-                drawCtx.fillStyle = makeColor(200,200,0,.5 - percent/5.0); drawCtx.arc(canvasElement.width/2,canvasElement.height/2,circleRadius * .5,0,2*Math.PI, false);
-                drawCtx.fill();
-                drawCtx.closePath();
+//                //Red-ish medium-sized circles 
+//                drawCtx.beginPath();
+//                drawCtx.fillStyle = makeColor(255,111,111,.34 - percent/3.0); drawCtx.arc(canvasElement.width/2,canvasElement.height/2,circleRadius,0,2*Math.PI, false);
+//                drawCtx.fill();
+//                drawCtx.closePath();
+//                
+//                // Bigger blue circle with more transparency
+//                drawCtx.beginPath();
+//                drawCtx.fillStyle = makeColor(0,0,255,.10 - percent/10.0); drawCtx.arc(canvasElement.width/2,canvasElement.height/2,circleRadius * 1.5,0,2*Math.PI, false);
+//                drawCtx.fill();
+//                drawCtx.closePath();
+//                
+//                // Smaller, yellow circles
+//                drawCtx.beginPath();
+//                drawCtx.fillStyle = makeColor(200,200,0,.5 - percent/5.0); drawCtx.arc(canvasElement.width/2,canvasElement.height/2,circleRadius * .5,0,2*Math.PI, false);
+//                drawCtx.fill();
+//                drawCtx.closePath();
                 
                 // Draw Inverted Red Bars 
                 //drawCtx.fillStyle = 'rgba(225,0,0,0.6)';
                 //drawCtx.fillRect(640-i *(barWidth+barSpacing), topSpacing + 256-audioData[i] - 20, barWidth, barHeight);
                 
-                // Inverted purple triangles
-                drawCtx.beginPath();
-                drawCtx.moveTo(640-i*(barWidth+barSpacing),topSpacing +256-audioData[i]-80);
-                drawCtx.lineTo(640-i*(barWidth+barSpacing)-40,256-audioData[i]-100); 
-                drawCtx.lineTo(640-i*(barWidth+barSpacing)+40,256-audioData[i]-100);
-                drawCtx.closePath();
-                drawCtx.strokeStyle = 'purple';
-                drawCtx.lineWidth = '4';
-                drawCtx.stroke();
-                
-				drawCtx.fillStyle = 'rgba(0,225,0,0.6)'; 
-				
-				// the higher the amplitude of the sample (bin) the taller the bar
-				// remember we have to draw our bars left-to-right and top-down
-				//drawCtx.fillRect(i * (barWidth + barSpacing),topSpacing + 256-audioData[i],barWidth,barHeight); 
-                
-                
-                // Drawing white triangles
-                drawCtx.beginPath();
-                drawCtx.moveTo(i*(barWidth+barSpacing),topSpacing +256-audioData[i]);
-                drawCtx.lineTo(i*(barWidth+barSpacing)-40,256-audioData[i]+100); 
-                drawCtx.lineTo(i*(barWidth+barSpacing)+40,256-audioData[i]+100);
-                drawCtx.closePath();
-                drawCtx.strokeStyle = 'white';
-                drawCtx.lineWidth = '4';
-                drawCtx.stroke();
+//                // Inverted purple triangles
+//                drawCtx.beginPath();
+//                drawCtx.moveTo(640-i*(barWidth+barSpacing),topSpacing +256-audioData[i]-80);
+//                drawCtx.lineTo(640-i*(barWidth+barSpacing)-40,256-audioData[i]-100); 
+//                drawCtx.lineTo(640-i*(barWidth+barSpacing)+40,256-audioData[i]-100);
+//                drawCtx.closePath();
+//                drawCtx.strokeStyle = 'purple';
+//                drawCtx.lineWidth = '4';
+//                drawCtx.stroke();
+//                
+//				drawCtx.fillStyle = 'rgba(0,225,0,0.6)'; 
+//				
+//				// the higher the amplitude of the sample (bin) the taller the bar
+//				// remember we have to draw our bars left-to-right and top-down
+//				//drawCtx.fillRect(i * (barWidth + barSpacing),topSpacing + 256-audioData[i],barWidth,barHeight); 
+//                
+//                
+//                // Drawing white triangles
+//                drawCtx.beginPath();
+//                drawCtx.moveTo(i*(barWidth+barSpacing),topSpacing +256-audioData[i]);
+//                drawCtx.lineTo(i*(barWidth+barSpacing)-40,256-audioData[i]+100); 
+//                drawCtx.lineTo(i*(barWidth+barSpacing)+40,256-audioData[i]+100);
+//                drawCtx.closePath();
+//                drawCtx.strokeStyle = 'white';
+//                drawCtx.lineWidth = '4';
+//                drawCtx.stroke();
+                drawTriangle(drawCtx, audioData,topSpacing, i);
             
                 
 				
