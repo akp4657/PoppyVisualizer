@@ -1,0 +1,41 @@
+	<style>
+	body {
+		background: #eeeeee;
+		font-family: tahoma, verdana, sans serif;
+	}
+
+	canvas {
+        position:absolute;
+        left: 30%;
+        top: 5%;
+		background: gray;
+	}
+
+	#controls{
+        position: absolute;
+		left: 43%;
+		top: 70%;
+  }
+  
+  section{
+  	margin-bottom:1em;
+  }
+  
+  #playButton{
+  	font-size: 1.2em;
+  	width: 3.5em;
+  }
+  
+	button[data-playing="yes"]:after{
+		content: "Pause";
+	}
+	
+	button[data-playing="no"]:after{
+		content: "Play";
+	}
+	
+	#fsButton{
+  	font-size: 1.2em;
+  	width: 6em;
+  }
+	</style>
