@@ -11,6 +11,11 @@
 			sound3:  "media/Hard Feelings.mp3"
 		});
 		
+
+        const BAR_WIDTH = 2;
+        const MAX_BAR_HEIGHT = 100;
+        const PADDING = 1;
+
 		// 2 - elements on the page
 		let audioElement,canvasElement;
 		
@@ -32,7 +37,7 @@
 		let audioData = new Uint8Array(NUM_SAMPLES/2); 
         
         // Value for circle radius
-        let sliderValue;
+        let sliderValue =1;
         
         let freq = false, waveform = false, noise = false, sepia = false;
 		
@@ -187,6 +192,8 @@
 			let topSpacing = 50;
             drawRectangles(drawCtx);
             
+            let sum=0;
+            
 			// loop through the data and draw!
 			for(let i=0; i<audioData.length; i++) 
             { 
@@ -197,9 +204,8 @@
                     drawCtx.save();
                     
                     drawCtx.font = "30px Noto Sans JP";
-                    drawCtx.clearRect(0,0,800,600);  
-                    
-                    drawCtx.fillText(audioData[i]+"Hz",50,50);
+                    sum/=NUM_SAMPLES;
+                    drawCtx.fillText(sum+"Hz",50,50);
                     
                     drawCtx.restore();
                 }
@@ -208,6 +214,14 @@
                 if(waveform)
                 {
                     //canvas waveform stuff here
+                    
+                    let percent = audioData[i]/255;
+                    percent = percent < 0.02 ? .02 : percent;
+                    //drawCtx.translate(BAR_WIDTH, 0);
+                    drawCtx.save();
+                    drawCtx.fillRect(barWidth*i+i*PADDING,0,BAR_WIDTH,MAX_BAR_HEIGHT*percent);
+                    drawCtx.restore();
+                    //drawCtx.translate(PADDING,0);
                 }
                 
                 /* Drawing Circles */ 
@@ -216,67 +230,16 @@
                 let circleRadius = percent * maxRadius * sliderValue/2;
                 
                 drawCircles(drawCtx, circleRadius);
-//                /* Drawing Circles */ 
-//                let percent = audioData[i] / 255;
-//                let maxRadius = 200;
-//                let circleRadius = percent * maxRadius * sliderValue/2;
-                
-//                //Red-ish medium-sized circles 
-//                drawCtx.beginPath();
-//                drawCtx.fillStyle = makeColor(255,111,111,.34 - percent/3.0); drawCtx.arc(canvasElement.width/2,canvasElement.height/2,circleRadius,0,2*Math.PI, false);
-//                drawCtx.fill();
-//                drawCtx.closePath();
-//                
-//                // Bigger blue circle with more transparency
-//                drawCtx.beginPath();
-//                drawCtx.fillStyle = makeColor(0,0,255,.10 - percent/10.0); drawCtx.arc(canvasElement.width/2,canvasElement.height/2,circleRadius * 1.5,0,2*Math.PI, false);
-//                drawCtx.fill();
-//                drawCtx.closePath();
-//                
-//                // Smaller, yellow circles
-//                drawCtx.beginPath();
-//                drawCtx.fillStyle = makeColor(200,200,0,.5 - percent/5.0); drawCtx.arc(canvasElement.width/2,canvasElement.height/2,circleRadius * .5,0,2*Math.PI, false);
-//                drawCtx.fill();
-//                drawCtx.closePath();
-                
-                // Draw Inverted Red Bars 
-                //drawCtx.fillStyle = 'rgba(225,0,0,0.6)';
-                //drawCtx.fillRect(640-i *(barWidth+barSpacing), topSpacing + 256-audioData[i] - 20, barWidth, barHeight);
-                
-//                // Inverted purple triangles
-//                drawCtx.beginPath();
-//                drawCtx.moveTo(640-i*(barWidth+barSpacing),topSpacing +256-audioData[i]-80);
-//                drawCtx.lineTo(640-i*(barWidth+barSpacing)-40,256-audioData[i]-100); 
-//                drawCtx.lineTo(640-i*(barWidth+barSpacing)+40,256-audioData[i]-100);
-//                drawCtx.closePath();
-//                drawCtx.strokeStyle = 'purple';
-//                drawCtx.lineWidth = '4';
-//                drawCtx.stroke();
-//                
-//				drawCtx.fillStyle = 'rgba(0,225,0,0.6)'; 
-//				
-//				// the higher the amplitude of the sample (bin) the taller the bar
-//				// remember we have to draw our bars left-to-right and top-down
-//				//drawCtx.fillRect(i * (barWidth + barSpacing),topSpacing + 256-audioData[i],barWidth,barHeight); 
-//                
-//                
-//                // Drawing white triangles
-//                drawCtx.beginPath();
-//                drawCtx.moveTo(i*(barWidth+barSpacing),topSpacing +256-audioData[i]);
-//                drawCtx.lineTo(i*(barWidth+barSpacing)-40,256-audioData[i]+100); 
-//                drawCtx.lineTo(i*(barWidth+barSpacing)+40,256-audioData[i]+100);
-//                drawCtx.closePath();
-//                drawCtx.strokeStyle = 'white';
-//                drawCtx.lineWidth = '4';
-//                drawCtx.stroke();
+
                 drawTriangle(drawCtx, audioData,topSpacing, i);
             
-                
+                sum+=audioData[i];
 				
 			}
             
             manipulatePixels(drawCtx);
-			 
+            
+            
 		} 
 		
 		
