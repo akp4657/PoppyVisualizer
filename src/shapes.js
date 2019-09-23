@@ -31,19 +31,15 @@ function drawCircles(ctx, radius)
 }
 
 function drawTriangle(ctx, audio, topSpacing, num)
-{
+{ 
     ctx.beginPath();
-    //ctx.moveTo(500, topSpacing +256-audio[num]);
-    ctx.fillStyle = 'green';
-    ctx.arc(500,300-audio[num]/2,3,0,2*Math.PI, false);
-    //ctx.lineTo(460, 256 - audio[num]+100);
-    //ctx.lineTo(460, 256 - audio[num]+100);
+    ctx.fillStyle = 'rgba(255,111,111,.34)';
+    ctx.moveTo(500,300-audio[num]/1.5);
+    ctx.lineTo(500-audio[num]/1.5,300+(audio[num]/2.5)); 
+    ctx.lineTo(500+audio[num]/1.5,300+(audio[num]/2.5));
     ctx.fill();
     ctx.closePath();
-    ctx.strokeStyle = 'green';
-    ctx.lineWidth = '1';
     ctx.stroke();
-    //ctx.clearRect(0,0,1000,600);
 
 }
 
