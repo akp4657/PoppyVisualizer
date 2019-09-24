@@ -1,16 +1,16 @@
 "use strict";
 
 // Background circles
-function drawRectangles(ctx)
+function drawRectangles(ctx, canvas)
 {
     ctx.save();
     ctx.fillStyle = 'white';
-    ctx.fillRect(0,0,500,600);
+    ctx.fillRect(0,0,canvas.width/2,canvas.height);
     ctx.restore();
     
     ctx.save();
     ctx.fillStyle = 'black';
-    ctx.fillRect(500,0,500,600);
+    ctx.fillRect(canvas.width/2,0,canvas.width/2,canvas.height);
     ctx.restore();
 }
 
@@ -51,7 +51,7 @@ function drawCurves(ctx, audio, canvas, num)
     ctx.lineWidth="3";
     ctx.strokeStyle = "black";
     ctx.beginPath();
-    ctx.moveTo(500, 0);
+    ctx.moveTo(canvas.width/2, 0);
     ctx.quadraticCurveTo(-audio[num], canvas.height/2, canvas.width/2, canvas.height);
     ctx.stroke();
     
