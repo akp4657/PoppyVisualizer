@@ -42,6 +42,8 @@
 			setupWebaudio();
 			setupCanvas();
 			setupUI();
+            canvasElement.height = window.innerHeight;
+            canvasElement.width = window.innerWidth;
 			update();
 		}
 		
@@ -175,7 +177,7 @@
 			let barSpacing = 1;
 			let barHeight = 100;
 			let topSpacing = 50;
-            drawRectangles(drawCtx);
+            drawRectangles(drawCtx, canvasElement);
             
 			// loop through the data and draw!
 			for(let i=0; i<audioData.length; i++) 
