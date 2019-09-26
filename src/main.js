@@ -47,6 +47,8 @@
 			setupWebaudio();
 			setupCanvas();
 			setupUI();
+            canvasElement.height = window.innerHeight;
+            canvasElement.width = window.innerWidth;
 			update();
             console.log("we in init");
 		}
@@ -190,7 +192,7 @@
 			let barSpacing = 1;
 			let barHeight = 100;
 			let topSpacing = 50;
-            drawRectangles(drawCtx);
+            drawRectangles(drawCtx, canvasElement);
             
             let sum=0;
             
@@ -229,9 +231,11 @@
                 let maxRadius = 200;
                 let circleRadius = percent * maxRadius * sliderValue/2;
                 
-                drawCircles(drawCtx, circleRadius);
+                
+                drawCircles(drawCtx, canvasElement, audioData, i);
 
-                drawTriangle(drawCtx, audioData,topSpacing, i);
+                drawTriangle(drawCtx, audioData,canvasElement, i);
+                drawCurves(drawCtx, audioData, canvasElement, i);
             
                 sum+=audioData[i];
 				
