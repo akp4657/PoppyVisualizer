@@ -19,16 +19,24 @@ function drawCircles(ctx, canvas, audio, num)
     // Get the wave bin (audiodata i )
     // Have the radius bounce off a percentage of that 
     // Make the circle solid 
+    var grad = ctx.createRadialGradient((canvas.width*(2/5)),(canvas.height*(2/7)),audio[10]/12, (canvas.width*(2/5)),(canvas.height*(2/7)),audio[14]/2);
+    //var grad = ctx.createRadialGradient()
+    grad.addColorStop(0,'red');
+    grad.addColorStop(1,'orange');
+//    var grad1 = ctx.createRadialGradient(canvas.width*(3/5)),(canvas.height*(2/7)),audio[10]/12, (canvas.width*(3/5)),(canvas.height*(2/7)),audio[14]/2);
+//    grad1.addColorStop(0,'red');
+//    grad1.addColorStop(1,'orange');
+    
     ctx.save();
     ctx.beginPath();
-    ctx.fillStyle = 'rgba(255,111,111,.34)'; 
-    ctx.arc((canvas.width*(2/5)),(canvas.height*(2/7)),audio[num]/3,0,2*Math.PI, false);
+    ctx.fillStyle = grad; 
+    ctx.arc((canvas.width*(2/5)),(canvas.height*(2/7)),audio[14]/2.5,0,2*Math.PI, false);
     ctx.fill();
     ctx.closePath();
     
     ctx.beginPath();
-    ctx.fillStyle = 'rgba(255,111,111,.34)'; 
-    ctx.arc((canvas.width*(3/5)),(canvas.height*(2/7)),audio[num]/3,0,2*Math.PI, false);
+    ctx.fillStyle = grad; 
+    ctx.arc((canvas.width*(3/5)),(canvas.height*(2/7)),audio[14]/2,0,2*Math.PI, false);
     ctx.fill();
     ctx.closePath();
     ctx.restore();
