@@ -1,23 +1,29 @@
 	<style>
-
-	canvas {
-        position:absolute;
-        left: 25.5%;
-        top: 5%;
-		background: gray;
-	}
-
     html, body 
     {
         width: 100%;
         height: 100%;
         margin: 0;
     }
-
-    body {
-		background: #eeeeee;
-		font-family: tahoma, verdana, sans serif;
+	canvas {
+        position:absolute;
+        		
 	}
+
+
+    #mainCanavs{
+        position:absolute;
+        z-index: 1;
+    }
+    
+    #logoCanavs{
+        position:absolute;
+        z-index: 2;
+    }
+
+  
+
+    
 
 	#controls{
         position: absolute;

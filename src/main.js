@@ -8,7 +8,7 @@
 		const SOUND_PATH = Object.freeze({
 			sound1: "media/Metal.mp3",
 			sound2: "media/Concrete.mp3",
-			sound3:  "media/Hard Feelings.mp3"
+			sound3: "media/Hard Feelings.mp3"
 		});
 		
 
@@ -16,14 +16,17 @@
         const MAX_BAR_HEIGHT = 100;
         const PADDING = 1;
 
+        const poppyLogo = new Image();
+ 		poppyLogo.src = "media/poppyLogo.png";
+
 		// 2 - elements on the page
-		let audioElement,canvasElement;
+		let audioElement,canvasElement,logoCanvasElement;
 		
 		// UI
 		let playButton;
 		
 		// 3 - our canvas drawing context
-		let drawCtx
+		let drawCtx, logoCtx;
 		
 		// 4 - our WebAudio context
 		let audioCtx;
@@ -49,6 +52,9 @@
 			setupUI();
             canvasElement.height = window.innerHeight;
             canvasElement.width = window.innerWidth;
+            logoCanvasElement.height = window.innerHeight;
+            logoCanvasElement.width = window.innerWidth;
+            logoCtx.translate(0,logoCanvasElement.height);
 			update();
             console.log("we in init");
 		}
@@ -91,9 +97,17 @@
 		}
 		
 		function setupCanvas(){
-			canvasElement = document.querySelector('canvas');
+			canvasElement = document.querySelector('#mainCanvas');
 			drawCtx = canvasElement.getContext("2d");
+            setupLogo();
 		}
+
+        function setupLogo(){
+            logoCanvasElement = document.querySelector('#logoCanvas');
+            logoCtx = logoCanvasElement.getContext("2d");
+            logoCtx.clearRect(0,0,logoCanvasElement.width,logoCanvasElement.height);
+            logoCtx.drawImage()
+        }
 		
 		function setupUI()
         {
