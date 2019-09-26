@@ -2,13 +2,16 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8" />
-	<title>Web Audio Viz - Start</title>
+	<title>CJ & Anthony's Audio Visualizer Prototype</title>
     <link href="styles/styles.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans+JP&display=swap" rel="stylesheet">
 </head>
 <body>
-	<canvas width="1000" height="600"></canvas>
+	<canvas width="1000" height="600" id="mainCanvas"></canvas>
+    <canvas width="1000" height="600" id="logoCanvas"></canvas>
+
 	<div id="controls">
-		<audio></audio>
+		<audio controls ></audio>
 		<section>
 		<label>Track: 
 			<select id="trackSelect">
@@ -23,17 +26,31 @@
 		<section>
 			Volume: <input type="range" id="volumeSlider" min="0" max="2" value="1" step="0.01">
 			<span id="volumeLabel">???</span>
-			</section>
-        <section>
-            Circle Radius: <input type="range" id="radiusSlider" min="1" max="5" value="1" step="1">
-            <span id="radiusLabel">???</span>
         </section>
         <section>
-            <span><input type="checkbox" id="tintCB"> <label for="tingCB">Tint</label></span>
-            <span><input type="checkbox" id="invertCB"> <label for="invertCB">Invert</label></span>
-            <span><input type="checkbox" id="noiseCB"> <label for="noiseCB">Noise</label></span>
+            Circle Radius: <input type="range" id="radiusSlider" min="1" max="3" value="1" step="0.01">
+            <span id="radiusLabel">1</span>
+        </section>
+        
+        <section>
+            Pitch: <input type="range" id="pitchSlider" min="-5" max="5" value="1" step="0.01">
+            <span id="pitchLabel"></span>
+        </section>
+        
+        <section>
             <span><input type="checkbox" id="sepiaCB"> <label for="sepiaCB">Sepia</label></span>
+            <span><input type="checkbox" id="noiseCB"> <label for="noiseCB">Noise</label></span>
+            <span><input type="checkbox" id="freqCB"> <label for="freqCB">Show Frequency</label></span>
+            <span><input type="checkbox" id="waveformCB"> <label for="waveformCB">Show Waveform</label></span>
         </section>
+        <section>
+            <input type="radio" name="song" value="song1">Song 1<br>
+            <input type="radio" name="song" value="song2">Song 2<br>
+            <input type="radio" name="song" value="song3">Song 3<br> 
+        </section>
+        
+        <img src="media/fullscreenIcon.png" id="fullscreen">
+        
 	</div>
 	
     <script src="src/shapes.js"></script>

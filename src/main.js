@@ -1,4 +1,4 @@
-	"use strict";
+	'use strict';
 		
 		window.onload = init;
 		
@@ -8,17 +8,25 @@
 		const SOUND_PATH = Object.freeze({
 			sound1: "media/Metal.mp3",
 			sound2: "media/Concrete.mp3",
-			sound3:  "media/Hard Feelings.mp3"
+			sound3: "media/Hard Feelings.mp3"
 		});
 		
+
+        const BAR_WIDTH = 2;
+        const MAX_BAR_HEIGHT = 100;
+        const PADDING = 1;
+
+        const poppyLogo = new Image();
+ 		poppyLogo.src = "media/poppyLogo.png";
+
 		// 2 - elements on the page
-		let audioElement,canvasElement;
+		let audioElement,canvasElement,logoCanvasElement;
 		
 		// UI
 		let playButton;
 		
 		// 3 - our canvas drawing context
-		let drawCtx
+		let drawCtx, logoCtx;
 		
 		// 4 - our WebAudio context
 		let audioCtx;
@@ -32,9 +40,9 @@
 		let audioData = new Uint8Array(NUM_SAMPLES/2); 
         
         // Value for circle radius
-        let sliderValue;
+        let sliderValue =1;
         
-        let invert = false, tintRed = false, noise = false, sepia = false;
+        let freq = false, waveform = false, noise = false, sepia = false;
 		
 		
 		// FUNCTIONS
@@ -44,7 +52,11 @@
 			setupUI();
             canvasElement.height = window.innerHeight;
             canvasElement.width = window.innerWidth;
+            logoCanvasElement.height = window.innerHeight;
+            logoCanvasElement.width = window.innerWidth;
+            logoCtx.translate(0,logoCanvasElement.height);
 			update();
+            console.log("we in init");
 		}
 		
 		function setupWebaudio(){
@@ -85,12 +97,21 @@
 		}
 		
 		function setupCanvas(){
-			canvasElement = document.querySelector('canvas');
+			canvasElement = document.querySelector('#mainCanvas');
 			drawCtx = canvasElement.getContext("2d");
+            setupLogo();
 		}
+
+        function setupLogo(){
+            logoCanvasElement = document.querySelector('#logoCanvas');
+            logoCtx = logoCanvasElement.getContext("2d");
+            logoCtx.clearRect(0,0,logoCanvasElement.width,logoCanvasElement.height);
+            logoCtx.drawImage()
+        }
 		
 		function setupUI()
         {
+            console.log("in setup UI");
 			playButton = document.querySelector("#playButton");
 			playButton.onclick = e => {
 				console.log(`audioCtx.state = ${audioCtx.state}`);
@@ -109,14 +130,14 @@
 					e.target.dataset.playing = "no";
 				}
                 
-                document.querySelector('#invertCB').checked = invert;
-                document.querySelector('#noiseCB').checked = noise;
-                document.querySelector('#tintCB').checked = tintRed;
                 document.querySelector('#sepiaCB').checked = sepia;
+                document.querySelector('#noiseCB').checked = noise;
+                document.querySelector('#freqCB').checked = freq;
+                document.querySelector('#waveformCB').checked = waveform;
                 
-                document.querySelector('#invertCB').onchange = e => invert = e.target.checked; document.querySelector('#noiseCB').onchange = e => noise = e.target.checked;
-                document.querySelector('#tintCB').onchange = e => tintRed = e.target.checked;
-                document.querySelector('#sepiaCB').onchange = e => sepia = e.target.checked;
+                document.querySelector('#sepiaCB').onchange = e => sepia = e.target.checked; document.querySelector('#noiseCB').onchange = e => noise = e.target.checked;
+                document.querySelector('#freqCB').onchange = e => freq = e.target.checked;
+                document.querySelector('#waveformCB').onchange = e => waveform = e.target.checked;
 	
 			};
 			
@@ -142,7 +163,15 @@
                 radiusLabel.innerHTML = sliderValue;
             }
 			
-			
+			//fullscreen button
+            let fullscreenButton = document.querySelector("#fullscreen");
+            console.log(fullscreenButton)
+            fullscreenButton.onclick = e =>
+            {
+                canvasElement.webkitRequestFullscreen();
+            }
+            
+            
 			// if track ends
 			audioElement.onended =  _ => {
 				playButton.dataset.playing = "no";
@@ -167,7 +196,7 @@
 			// populate the audioData with the frequency data
 			// notice these arrays are passed "by reference" 
 			analyserNode.getByteFrequencyData(audioData);
-		
+		  
 			// OR
 			//analyserNode.getByteTimeDomainData(audioData); // waveform data
 			
@@ -179,9 +208,39 @@
 			let topSpacing = 50;
             drawRectangles(drawCtx, canvasElement);
             
+            let sum=0;
+            
 			// loop through the data and draw!
 			for(let i=0; i<audioData.length; i++) 
-            {
+            { 
+                // show frequency
+                if(freq)
+                {
+                    //display frequency
+                    drawCtx.save();
+                    
+                    drawCtx.font = "30px Noto Sans JP";
+                    sum/=NUM_SAMPLES;
+                    drawCtx.fillText(sum+"Hz",50,50);
+                    
+                    drawCtx.restore();
+                }
+                
+                // show waveform
+                if(waveform)
+                {
+                    //canvas waveform stuff here
+                    
+                    let percent = audioData[i]/255;
+                    percent = percent < 0.02 ? .02 : percent;
+                    //drawCtx.translate(BAR_WIDTH, 0);
+                    drawCtx.save();
+                    drawCtx.fillRect(barWidth*i+i*PADDING,0,BAR_WIDTH,MAX_BAR_HEIGHT*percent);
+                    drawCtx.restore();
+                    //drawCtx.translate(PADDING,0);
+                }
+                
+                /* Drawing Circles */ 
                 let percent = audioData[i] / 255;
                 let maxRadius = 200;
                 let circleRadius = percent * maxRadius * sliderValue/2;
@@ -192,12 +251,13 @@
                 drawTriangle(drawCtx, audioData,canvasElement, i);
                 drawCurves(drawCtx, audioData, canvasElement, i);
             
-                
+                sum+=audioData[i];
 				
 			}
             
             manipulatePixels(drawCtx);
-			 
+            
+            
 		} 
 		
 		
@@ -230,27 +290,14 @@
             let i; // i outside of loop is optimization 
             for(i=0; i<length; i+=4)
             {
-                // 31 increase red values
-                if(tintRed)
-                {
-                    data[i] = data[i]+100;   
-                }
                 
-                // 32 - Invert colors
-                if(invert)
-                {
-                    let red = data[i], green = data[i+1], blue = data[i+2];
-                    data[i] = 255 - red;
-                    data[i+1] = 255 - green;
-                    data[i+2] = 255 - blue;
-                }
                 
                 // 33 - Noise 
                 if(noise && Math.random() < .10)
                 {
                     data[i] = data[i+1] = data[i+2] = 128; // gray noise 
-                    data[i] = data[i+1] = data[i+2] = 255; // white noise 
-                    data[i] = data[i+1] = data[i+2] = 0; // black noise 
+                    //data[i] = data[i+1] = data[i+2] = 255; // white noise 
+                    //data[i] = data[i+1] = data[i+2] = 0; // black noise 
                     data[i+3] = 255; // alpha
                 }
                 
