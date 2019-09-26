@@ -186,10 +186,11 @@
                 let maxRadius = 200;
                 let circleRadius = percent * maxRadius * sliderValue/2;
                 
-                drawCurves(drawCtx, audioData, canvasElement, i);
-                drawCircles(drawCtx, circleRadius);
+                
+                drawCircles(drawCtx, canvasElement, audioData, i);
 
-                drawTriangle(drawCtx, audioData,topSpacing, i);
+                drawTriangle(drawCtx, audioData,canvasElement, i);
+                drawCurves(drawCtx, audioData, canvasElement, i);
             
                 
 				
