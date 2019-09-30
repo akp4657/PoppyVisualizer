@@ -2,14 +2,18 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8" />
-	<title>Web Audio Viz - Start</title>
+	<title>CJ & Anthony's Audio Visualizer Prototype</title>
     <link href="styles/styles.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans+JP&display=swap" rel="stylesheet">
 </head>
 <body>
-	<canvas width="1000" height="600"></canvas>
+	<canvas width="1000" height="600" id="mainCanvas"></canvas>
+    <canvas width="1000" height="600" id="logoCanvas"></canvas>
+
 	<div id="controls">
-		<audio></audio>
-		<section>
+		<audio controls ></audio>
+		<section id='topControls'>
+<!--
 		<label>Track: 
 			<select id="trackSelect">
 				<option value="media/Metal.mp3">Metal</option>
@@ -17,28 +21,43 @@
 				<option value="media/Hard Feelings.mp3" selected>Hard Feelings</option>
 			</select>
 		</label>
+-->
 		<button id="playButton" data-playing="no"></button>
-		<button id="fsButton">Full Screen</button>
+<!--        <img src="media/fullscreenIcon.png" id="fullscreen">-->
+
+        <button id="fsButton">Full Screen</button>
 		</section>
-		<section>
-			Volume: <input type="range" id="volumeSlider" min="0" max="2" value="1" step="0.01">
-			<span id="volumeLabel">???</span>
-			</section>
+		
         <section>
-            Circle Radius: <input type="range" id="radiusSlider" min="1" max="5" value="1" step="1">
-            <span id="radiusLabel">???</span>
+            Circle Radius: <input type="range" id="radiusSlider" min="1" max="3" value="1" step="0.01">
+            <span id="radiusLabel">1</span>
         </section>
+        
         <section>
-            <span><input type="checkbox" id="tintCB"> <label for="tingCB">Tint</label></span>
-            <span><input type="checkbox" id="invertCB"> <label for="invertCB">Invert</label></span>
-            <span><input type="checkbox" id="noiseCB"> <label for="noiseCB">Noise</label></span>
+            Pitch: <input type="range" id="pitchSlider" min="-5" max="5" value="1" step="0.01">
+            <span id="pitchLabel"></span>
+        </section>
+        
+        <section>
             <span><input type="checkbox" id="sepiaCB"> <label for="sepiaCB">Sepia</label></span>
+            <span><input type="checkbox" id="noiseCB"> <label for="noiseCB">Noise</label></span>
+            <span><input type="checkbox" id="freqCB"> <label for="freqCB">Show Frequency</label></span>
+            <span><input type="checkbox" id="waveformCB"> <label for="waveformCB">Show Waveform</label></span>
         </section>
+        <section>
+            <p>Song Selection</p>
+            <input type="radio" id="songSelect" name="song" value="media/Metal.mp3">Metal<br>
+            <input type="radio" id="songSelect" name="song" value="media/Concrete.mp3">Concrete<br>
+            <input type="radio" id="songSelect" name="song" value="media/Hard Feelings.mp3" checked>Hard Feelings<br> 
+        </section>
+        
+        
 	</div>
 	
-    <script src="src/shapes.js"></script>
-	<script src="src/utils.js"></script>
-	<script src="src/main.js"></script>
+    <script src="src/loader.js" type="module"></script>
+    <script src="src/dat.gui.min.js"></script>
+
+
     
 </body>
 </html>
