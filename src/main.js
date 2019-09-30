@@ -1,5 +1,7 @@
 	'use strict';
 		
+    import {drawCircles,drawRectangles,drawTriangle, drawCurves,drawPoppy} from './shapes.js';
+    export {init};
 		window.onload = init;
 		
 		// SCRIPT SCOPED VARIABLES
@@ -106,7 +108,7 @@
             logoCanvasElement = document.querySelector('#logoCanvas');
             logoCtx = logoCanvasElement.getContext("2d");
             logoCtx.clearRect(0,0,logoCanvasElement.width,logoCanvasElement.height);
-            logoCtx.drawImage()
+            
         }
 		
 		function setupUI()

@@ -1,5 +1,5 @@
 "use strict";
-
+export {drawRectangles,drawCircles,drawTriangle,drawCurves,drawPoppy};
 // Background circles
 function drawRectangles(ctx, canvas)
 {
