@@ -1,5 +1,3 @@
-	'use strict';
-		
     import {drawCircles,drawRectangles,drawTriangle, drawCurves,drawPoppy} from './shapes.js';
     export {init};
 		window.onload = init;
