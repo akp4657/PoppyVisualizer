@@ -1,7 +1,8 @@
-	'use strict';
-		
-		window.onload = init;
-		
+    import {drawCircles,drawRectangles,drawTriangle, drawCurves,drawPoppy} from './shapes.js';
+    export {init};
+
+   
+    //const gui = new dat.GUI();		
 		// SCRIPT SCOPED VARIABLES
 				
 		// 1- here we are faking an enumeration - we'll look at another way to do this soon 
@@ -47,6 +48,8 @@
 		
 		// FUNCTIONS
 		function init(){
+                        console.log("we in init");
+
 			setupWebaudio();
 			setupCanvas();
 			setupUI();
@@ -56,8 +59,8 @@
             logoCanvasElement.width = window.innerWidth;
             logoCtx.translate(0,logoCanvasElement.height);
 			update();
-            console.log("we in init");
 		}
+
 		
 		function setupWebaudio(){
 			// 1 - The || is because WebAudio has not been standardized across browsers yet
@@ -100,13 +103,18 @@
 			canvasElement = document.querySelector('#mainCanvas');
 			drawCtx = canvasElement.getContext("2d");
             setupLogo();
-		}
+		} 
 
         function setupLogo(){
             logoCanvasElement = document.querySelector('#logoCanvas');
             logoCtx = logoCanvasElement.getContext("2d");
             logoCtx.clearRect(0,0,logoCanvasElement.width,logoCanvasElement.height);
-            logoCtx.drawImage()
+           
+            poppyLogo.onload=function()
+            {
+                logoCtx.drawImage(poppyLogo,10,100,200,500);
+            }
+            console.log(poppyLogo);
         }
 		
 		function setupUI()
@@ -130,7 +138,11 @@
 					e.target.dataset.playing = "no";
 				}
                 
-                document.querySelector('#sepiaCB').checked = sepia;
+                
+	
+			};
+            
+            document.querySelector('#sepiaCB').checked = sepia;
                 document.querySelector('#noiseCB').checked = noise;
                 document.querySelector('#freqCB').checked = freq;
                 document.querySelector('#waveformCB').checked = waveform;
@@ -138,18 +150,11 @@
                 document.querySelector('#sepiaCB').onchange = e => sepia = e.target.checked; document.querySelector('#noiseCB').onchange = e => noise = e.target.checked;
                 document.querySelector('#freqCB').onchange = e => freq = e.target.checked;
                 document.querySelector('#waveformCB').onchange = e => waveform = e.target.checked;
-	
-			};
-			
-			let volumeSlider = document.querySelector("#volumeSlider");
-			volumeSlider.oninput = e => {
-				gainNode.gain.value = e.target.value;
-				volumeLabel.innerHTML = Math.round((e.target.value/2 * 100));
-			};
-			volumeSlider.dispatchEvent(new InputEvent("input"));
 			
 			
-			document.querySelector("#trackSelect").onchange = e =>{
+			
+			
+			document.querySelector("#songSelect").onchange = e =>{
 				audioElement.src = e.target.value;
 				// pause the current track if it is playing
 				playButton.dispatchEvent(new MouseEvent("click"));
@@ -163,14 +168,14 @@
                 radiusLabel.innerHTML = sliderValue;
             }
 			
-			//fullscreen button
-            let fullscreenButton = document.querySelector("#fullscreen");
-            console.log(fullscreenButton)
-            fullscreenButton.onclick = e =>
-            {
-                canvasElement.webkitRequestFullscreen();
-            }
-            
+    //			//fullscreen button
+    //            let fullscreenButton = document.querySelector("#fullscreen");
+    //            console.log(fullscreenButton)
+    //            fullscreenButton.onclick = e =>
+    //            {
+    //                canvasElement.webkitRequestFullscreen();
+    //            }
+    //            
             
 			// if track ends
 			audioElement.onended =  _ => {
@@ -245,11 +250,16 @@
                 let maxRadius = 200;
                 let circleRadius = percent * maxRadius * sliderValue/2;
                 
+                if(i%3==0)
+                {
+                    drawCircles(drawCtx, canvasElement, audioData, i);
+                }
                 
-                drawCircles(drawCtx, canvasElement, audioData, i);
+                if(i%4==    0)
+                    drawCurves(drawCtx, audioData, canvasElement, i);
 
                 drawTriangle(drawCtx, audioData,canvasElement, i);
-                drawCurves(drawCtx, audioData, canvasElement, i);
+                
             
                 sum+=audioData[i];
 				

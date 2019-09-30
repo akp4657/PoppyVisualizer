@@ -22,13 +22,13 @@
     }
 
   
-
     
 
 	#controls{
         position: absolute;
-		left: 43%;
-		top: 70%;
+		left: 35%;
+		top: 106%;
+        background-color: azure;
   }
   
   section{
@@ -51,5 +51,5 @@
 	#fsButton{
   	font-size: 1.2em;
   	width: 6em;
-  }
+    }
 	</style>
