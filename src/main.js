@@ -1,6 +1,6 @@
     import {drawCircles,drawRectangles,drawTriangle, drawCurves,drawPoppy} from './shapes.js';
     export {init};
-		window.onload = init;
+		
 		
 		// SCRIPT SCOPED VARIABLES
 				
@@ -47,6 +47,8 @@
 		
 		// FUNCTIONS
 		function init(){
+                        console.log("we in init");
+
 			setupWebaudio();
 			setupCanvas();
 			setupUI();
@@ -56,7 +58,6 @@
             logoCanvasElement.width = window.innerWidth;
             logoCtx.translate(0,logoCanvasElement.height);
 			update();
-            console.log("we in init");
 		}
 		
 		function setupWebaudio(){
