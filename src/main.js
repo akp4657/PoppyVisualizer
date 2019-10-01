@@ -1,7 +1,7 @@
     import {drawCircles,drawRectangles,drawTriangle, drawCurves,drawPoppy} from './shapes.js';
     export {init};
-
-   
+    
+   var gui = new dat.GUI();
     //const gui = new dat.GUI();		
 		// SCRIPT SCOPED VARIABLES
 				
@@ -43,9 +43,27 @@
         // Value for circle radius
         let sliderValue =1;
         
+
         let freq = false, waveform = false, noise = false, sepia = false;
 		
+
+        var controls = function(){
+            this.circleRadius =1;
+            this.pitch=1;
+            this.displayWaveform=false;
+            this.displayFrequency=false;
+            this.displaySepia=false;
+            this.displayNoise=false;
+            this.song='Hard Feelings';
+            
+            this.fullScreen = function()
+            {
+                requestFullscreen(canvasElement);
+
+            }
+        }
 		
+        let cont = new controls();
 		// FUNCTIONS
 		function init(){
                         console.log("we in init");
@@ -53,6 +71,7 @@
 			setupWebaudio();
 			setupCanvas();
 			setupUI();
+			
             canvasElement.height = window.innerHeight;
             canvasElement.width = window.innerWidth;
             logoCanvasElement.height = window.innerHeight;
@@ -117,6 +136,30 @@
             console.log(poppyLogo);
         }
 		
+
+                    
+
+        window.onload = function(){
+            gui.add(cont,"circleRadius",0.5,3);
+            gui.add(cont,"pitch",-3,3);
+            gui.add(cont,"displayWaveform");
+            gui.add(cont,"displayFrequency");
+            gui.add(cont,"displaySepia");
+            gui.add(cont,"displayNoise");
+            gui.add(cont,"song",['Hard Feelings', 'Concrete', 'Metal']).onChange(changeSong);
+            gui.add(cont,"fullScreen");
+        }
+            
+            
+            
+            
+        
+
+        function changeSong(){
+            console.log("changed song\n new audio src= media/"+cont.song+".mp3");
+            audioElement.src="media/"+cont.song+".mp3";
+        }
+
 		function setupUI()
         {
             console.log("in setup UI");
@@ -142,31 +185,31 @@
 	
 			};
             
-            document.querySelector('#sepiaCB').checked = sepia;
-                document.querySelector('#noiseCB').checked = noise;
-                document.querySelector('#freqCB').checked = freq;
-                document.querySelector('#waveformCB').checked = waveform;
-                
-                document.querySelector('#sepiaCB').onchange = e => sepia = e.target.checked; document.querySelector('#noiseCB').onchange = e => noise = e.target.checked;
-                document.querySelector('#freqCB').onchange = e => freq = e.target.checked;
-                document.querySelector('#waveformCB').onchange = e => waveform = e.target.checked;
+//            document.querySelector('#sepiaCB').checked = sepia;
+//                document.querySelector('#noiseCB').checked = noise;
+//                document.querySelector('#freqCB').checked = freq;
+//                document.querySelector('#waveformCB').checked = waveform;
+//                
+//                document.querySelector('#sepiaCB').onchange = e => sepia = e.target.checked; document.querySelector('#noiseCB').onchange = e => noise = e.target.checked;
+//                document.querySelector('#freqCB').onchange = e => freq = e.target.checked;
+//                document.querySelector('#waveformCB').onchange = e => waveform = e.target.checked;
+//			
 			
 			
-			
-			
-			document.querySelector("#songSelect").onchange = e =>{
-				audioElement.src = e.target.value;
-				// pause the current track if it is playing
-				playButton.dispatchEvent(new MouseEvent("click"));
-			};
-            
+//			
+//			document.querySelector("#songSelect").onchange = e =>{
+//				audioElement.src = e.target.value;
+//				// pause the current track if it is playing
+//				playButton.dispatchEvent(new MouseEvent("click"));
+//			};
+//            
             // Radius Slider 
-            let radiusSlider = document.querySelector("#radiusSlider");
-            radiusSlider.oninput = e => 
-            {
-                sliderValue = e.target.value;
-                radiusLabel.innerHTML = sliderValue;
-            }
+//            let radiusSlider = document.querySelector("#radiusSlider");
+//            radiusSlider.oninput = e => 
+//            {
+//                sliderValue = e.target.value;
+//                radiusLabel.innerHTML = sliderValue;
+//            }
 			
     //			//fullscreen button
     //            let fullscreenButton = document.querySelector("#fullscreen");
@@ -182,9 +225,9 @@
 				playButton.dataset.playing = "no";
 			};
 			
-			document.querySelector("#fsButton").onclick = _ =>{
-				requestFullscreen(canvasElement);
-			};
+//			document.querySelector("#fsButton").onclick = _ =>{
+//				requestFullscreen(canvasElement);
+//			};
 			
 		}
 		
@@ -205,6 +248,14 @@
 			// OR
 			//analyserNode.getByteTimeDomainData(audioData); // waveform data
 			
+            //check song
+//            if(audioElement.src!="media/"+cont.song){
+//                audioElement.src="media/"+cont.song;
+//            }
+            
+            
+
+            
 			// DRAW!
 			//drawCtx.clearRect(0,0,800,600);  
 			let barWidth = 4;
@@ -232,7 +283,7 @@
                 }
                 
                 // show waveform
-                if(waveform)
+                if(cont.displayWaveform)
                 {
                     //canvas waveform stuff here
                     
@@ -303,7 +354,7 @@
                 
                 
                 // 33 - Noise 
-                if(noise && Math.random() < .10)
+                if(cont.displayNoise && Math.random() < .10)
                 {
                     data[i] = data[i+1] = data[i+2] = 128; // gray noise 
                     //data[i] = data[i+1] = data[i+2] = 255; // white noise 
@@ -312,7 +363,7 @@
                 }
                 
                 // 34 - Sepia 
-                if(sepia)
+                if(cont.displaySepia)
                 {
                     //let red = data[i], green = data[i+1], blue = data[i+2];
                     let outRed, outGreen, outBlue;
