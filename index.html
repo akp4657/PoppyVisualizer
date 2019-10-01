@@ -5,15 +5,15 @@
 	<title>CJ & Anthony's Audio Visualizer Prototype</title>
     <link href="styles/styles.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Noto+Sans+JP&display=swap" rel="stylesheet">
-        
+    <script type="module" href="src/dat.gui.js"></script>
 </head>
 <body>
 	<canvas width="1000" height="600" id="mainCanvas"></canvas>
     <canvas width="1000" height="600" id="logoCanvas"></canvas>
 
 	<div id="controls">
-		<audio controls ></audio>
-		<section id='topControls'>
+		<audio controls src="media/Hard%20Feelings.mp3" ></audio>
+<!--		<section id='topControls'>-->
 <!--
 		<label>Track: 
 			<select id="trackSelect">
@@ -26,19 +26,24 @@
 		<button id="playButton" data-playing="no"></button>
 <!--        <img src="media/fullscreenIcon.png" id="fullscreen">-->
 
-        <button id="fsButton">Full Screen</button>
-		</section>
+<!--        <button id="fsButton">Full Screen</button>-->
+<!--		</section>-->
 		
-        <section>
-            Circle Radius: <input type="range" id="radiusSlider" min="1" max="3" value="1" step="0.01">
+<!--        <section>-->
+<!--            Circle Radius: <input type="range" id="radiusSlider" min="1" max="3" value="1" step="0.01">-->
+<!--
             <span id="radiusLabel">1</span>
         </section>
+-->
         
+<!--
         <section>
             Pitch: <input type="range" id="pitchSlider" min="-5" max="5" value="1" step="0.01">
             <span id="pitchLabel"></span>
         </section>
+-->
         
+<!--
         <section>
             <span><input type="checkbox" id="sepiaCB"> <label for="sepiaCB">Sepia</label></span>
             <span><input type="checkbox" id="noiseCB"> <label for="noiseCB">Noise</label></span>
@@ -51,6 +56,7 @@
             <input type="radio" id="songSelect" name="song" value="media/Concrete.mp3">Concrete<br>
             <input type="radio" id="songSelect" name="song" value="media/Hard Feelings.mp3" checked>Hard Feelings<br> 
         </section>
+-->
         
         
 	</div>
