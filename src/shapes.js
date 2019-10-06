@@ -20,17 +20,20 @@ function drawCircles(ctx, canvas, audio, num)
     // Make the circle solid 
     /****The gradient colors are temporary****/
     var grad = ctx.createRadialGradient((canvas.width*(2/5)),(canvas.height*(2/7)),audio[10]/12, (canvas.width*(2/5)),(canvas.height*(2/7)),audio[14]/2);
-    grad.addColorStop(0,'red');
-    grad.addColorStop(1/3,'orange');
-    grad.addColorStop(2/3,'yellow');
-    grad.addColorStop(1,'green');
+    grad.addColorStop(0,'rgb(190,0,0)');
+    grad.addColorStop(1/4,'rgb(178,34,34)');
+    grad.addColorStop(2/4,'rgb(139,0,0)');
+    grad.addColorStop(3/4,'rgb(128,0,0)');
+    grad.addColorStop(1,'rgb(0,0,0)');
+
     
     var grad2 = ctx.createRadialGradient((canvas.width*(3/5)),(canvas.height*(2/7)),audio[10]/12, (canvas.width*(3/5)),(canvas.height*(2/7)),audio[14]/2);
-    grad2.addColorStop(0,'red');
-    grad2.addColorStop(1/3,'orange');
-    grad2.addColorStop(2/3,'yellow');
-    grad2.addColorStop(1,'green');
-    
+    grad2.addColorStop(0,'rgb(190,0,0)');
+    grad2.addColorStop(1/4,'rgb(178,34,34)');
+    grad2.addColorStop(2/4,'rgb(139,0,0)');
+    grad2.addColorStop(3/4,'rgb(128,0,0)');
+    grad2.addColorStop(1,'rgb(0,0,0)');
+
     ctx.beginPath();
     ctx.fillStyle = grad; 
     ctx.arc((canvas.width*(2/5)),(canvas.height*(2/7)),audio[14]/2.5,0,2*Math.PI, false);
@@ -48,7 +51,7 @@ function drawCircles(ctx, canvas, audio, num)
 function drawTriangle(ctx, audio, canvas, num)
 { 
     ctx.beginPath();
-    ctx.fillStyle = 'rgba(255,111,111,.34)';
+    ctx.fillStyle = 'rgba(190,0,0,.34)';
     ctx.moveTo(canvas.width/2,canvas.height/2-audio[num]/1.5);
     ctx.lineTo(canvas.width/2-audio[num]/1.5,canvas.height/2+(audio[num]/2.5)); 
     ctx.lineTo(canvas.width/2+audio[num]/1.5,canvas.height/2+(audio[num]/2.5));
@@ -78,7 +81,26 @@ function drawCurves(ctx, audio, canvas, num)
 
 }
 
-function drawPoppy(ctx)
+let alpha = 1;
+function drawPoppy(ctx, picture, pause, canvas)
 {
-    
+    //ctx.clearRect(0,0,picture.width,picture.height);
+    //requestAnimationFrame(drawPoppy);
+
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    ctx.drawImage(picture,canvas.width/2-picture.width/2, canvas.height/2-picture.height/2);
+    if(!pause){
+        
+        alpha += -.01;
+        if(alpha <=0 ) {alpha = 0; return;}
+
+    }
+    if(pause){
+        
+        alpha += .01;
+        if(alpha >=1 ) {alpha = 1; return;}
+
+    }
+    ctx.restore();
 }
