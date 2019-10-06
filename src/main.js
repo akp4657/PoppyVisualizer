@@ -24,7 +24,7 @@
         queenPicture.src = "media/queen.png";
 
 		// 2 - elements on the page
-		let audioElement,canvasElement,logoCanvasElement;
+		let audioElement,canvasElement,logoCanvasElement,audioControlsElement;
 		
 		// UI
 		let playButton;
@@ -66,6 +66,28 @@
                 requestFullscreen(canvasElement);
 
             }
+            this.play = function(){
+                console.log(`audioCtx.state = ${audioCtx.state}`);
+				
+				// check if context is in suspended state (autoplay policy)
+				if (pause && audioCtx.state == "suspended") {
+					audioCtx.resume();
+				}
+
+				if (pause) {
+                    pause = false;
+					audioElement.play();
+				// if track is playing pause it
+				} 
+                else if (!pause) {
+                    pause = true;
+					audioElement.pause();
+				}
+                
+                audioElement.onended =  _ => {
+				pause = true;
+                }
+            }
         }
 		
         let cont = new controls();
@@ -75,7 +97,7 @@
 
 			setupWebaudio();
 			setupCanvas();
-			setupUI();
+			//setupUI();
 			
             canvasElement.height = window.innerHeight;
             canvasElement.width = window.innerWidth;
@@ -155,90 +177,90 @@
             gui.add(cont,"displayNoise");
             gui.add(cont,"song",['Hard Feelings', 'Concrete', 'Metal']).onChange(changeSong);
             gui.add(cont,"fullScreen");
+            gui.add(cont,"play");
         }
             
             
-            
-            
-        
 
         function changeSong(){
             console.log("changed song\n new audio src= media/"+cont.song+".mp3");
             audioElement.src="media/"+cont.song+".mp3";
+            pause = true;
+            
         }
 
-		function setupUI()
-        {
-            console.log("in setup UI");
-			playButton = document.querySelector("#playButton");
-			playButton.onclick = e => {
-				console.log(`audioCtx.state = ${audioCtx.state}`);
+//		function setupUI()
+//        {
+//            console.log("in setup UI");
+			playButton = document.querySelector("#audioControls");
+			playButton.onclick= e => {
+				console.log(`audioCtx.state = ${audioCtx.state}`)};
 				
-				// check if context is in suspended state (autoplay policy)
-				if (audioCtx.state == "suspended") {
-					audioCtx.resume();
-				}
-
-				if (e.target.dataset.playing == "no") {
-                    pause = false;
-					audioElement.play();
-					e.target.dataset.playing = "yes";
-				// if track is playing pause it
-				} else if (e.target.dataset.playing == "yes") {
-                    pause = true;
-					audioElement.pause();
-					e.target.dataset.playing = "no";
-				}
+//				// check if context is in suspended state (autoplay policy)
+//				if (audioCtx.state == "suspended") {
+//					audioCtx.resume();
+//				}
+//
+//				if (e.target.dataset.playing == "no") {
+//                    pause = false;
+//					audioElement.play();
+//					e.target.dataset.playing = "yes";
+//				// if track is playing pause it
+//				} else if (e.target.dataset.playing == "yes") {
+//                    pause = true;
+//					audioElement.pause();
+//					e.target.dataset.playing = "no";
+//				}
                 
-                
-	
-			};
-            
-//            document.querySelector('#sepiaCB').checked = sepia;
-//                document.querySelector('#noiseCB').checked = noise;
-//                document.querySelector('#freqCB').checked = freq;
-//                document.querySelector('#waveformCB').checked = waveform;
 //                
-//                document.querySelector('#sepiaCB').onchange = e => sepia = e.target.checked; document.querySelector('#noiseCB').onchange = e => noise = e.target.checked;
-//                document.querySelector('#freqCB').onchange = e => freq = e.target.checked;
-//                document.querySelector('#waveformCB').onchange = e => waveform = e.target.checked;
-//			
-			
-			
-//			
-//			document.querySelector("#songSelect").onchange = e =>{
-//				audioElement.src = e.target.value;
-//				// pause the current track if it is playing
-//				playButton.dispatchEvent(new MouseEvent("click"));
+//	
 //			};
 //            
-            // Radius Slider 
-//            let radiusSlider = document.querySelector("#radiusSlider");
-//            radiusSlider.oninput = e => 
-//            {
-//                sliderValue = e.target.value;
-//                radiusLabel.innerHTML = sliderValue;
-//            }
-			
-    //			//fullscreen button
-    //            let fullscreenButton = document.querySelector("#fullscreen");
-    //            console.log(fullscreenButton)
-    //            fullscreenButton.onclick = e =>
-    //            {
-    //                canvasElement.webkitRequestFullscreen();
-    //            }
-    //            
-            
-			// if track ends
-			audioElement.onended =  _ => {
-				playButton.dataset.playing = "no";
-			};
-			
-//			document.querySelector("#fsButton").onclick = _ =>{
-//				requestFullscreen(canvasElement);
+////            document.querySelector('#sepiaCB').checked = sepia;
+////                document.querySelector('#noiseCB').checked = noise;
+////                document.querySelector('#freqCB').checked = freq;
+////                document.querySelector('#waveformCB').checked = waveform;
+////                
+////                document.querySelector('#sepiaCB').onchange = e => sepia = e.target.checked; document.querySelector('#noiseCB').onchange = e => noise = e.target.checked;
+////                document.querySelector('#freqCB').onchange = e => freq = e.target.checked;
+////                document.querySelector('#waveformCB').onchange = e => waveform = e.target.checked;
+////			
+//			
+//			
+////			
+////			document.querySelector("#songSelect").onchange = e =>{
+////				audioElement.src = e.target.value;
+////				// pause the current track if it is playing
+////				playButton.dispatchEvent(new MouseEvent("click"));
+////			};
+////            
+//            // Radius Slider 
+////            let radiusSlider = document.querySelector("#radiusSlider");
+////            radiusSlider.oninput = e => 
+////            {
+////                sliderValue = e.target.value;
+////                radiusLabel.innerHTML = sliderValue;
+////            }
+//			
+//    //			//fullscreen button
+//    //            let fullscreenButton = document.querySelector("#fullscreen");
+//    //            console.log(fullscreenButton)
+//    //            fullscreenButton.onclick = e =>
+//    //            {
+//    //                canvasElement.webkitRequestFullscreen();
+//    //            }
+//    //            
+//            
+//			// if track ends
+//			audioElement.onended =  _ => {
+//				playButton.dataset.playing = "no";
 //			};
-			
-		}
+//			
+////			document.querySelector("#fsButton").onclick = _ =>{
+////				requestFullscreen(canvasElement);
+////			};
+//			
+//		}
 		
 		function update() { 
 			// this schedules a call to the update() method in 1/60 seconds
