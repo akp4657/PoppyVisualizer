@@ -81,7 +81,7 @@
             canvasElement.width = window.innerWidth;
             logoCanvasElement.height = window.innerHeight;
             logoCanvasElement.width = window.innerWidth;
-            logoCtx.translate(0,logoCanvasElement.height);
+            
 			update();
 		}
 
@@ -131,13 +131,14 @@
 
         function setupLogo(){
             logoCanvasElement = document.querySelector('#logoCanvas');
+            
             logoCtx = logoCanvasElement.getContext("2d");
-            logoCtx.clearRect(0,0,logoCanvasElement.width,logoCanvasElement.height);
+            //logoCtx.clearRect(0,0,logoCanvasElement.width,logoCanvasElement.height);
            
-            poppyLogo.onload=function()
-            {
-                logoCtx.drawImage(poppyLogo,10,100,200,500);
-            }
+            poppyLogo.addEventListener('load', e => {
+                logoCtx.drawImage(poppyLogo,logoCanvasElement.width/2-132,logoCanvasElement.height/2-125,264,204);
+            });
+            
             console.log(poppyLogo);
         }
 
