@@ -20,6 +20,9 @@
         const poppyLogo = new Image();
  		poppyLogo.src = "media/poppyLogo.png";
 
+        const queenPicture = new Image();
+        queenPicture.src = "media/queen.png";
+
 		// 2 - elements on the page
 		let audioElement,canvasElement,logoCanvasElement;
 		
@@ -27,7 +30,7 @@
 		let playButton;
 		
 		// 3 - our canvas drawing context
-		let drawCtx, logoCtx;
+		let drawCtx, logoCtx, queenCtx;
 		
 		// 4 - our WebAudio context
 		let audioCtx;
@@ -42,9 +45,11 @@
         
         // Value for circle radius
         let sliderValue =1;
+
+        let alpha = 1;
         
 
-        let freq = false, waveform = false, noise = false, sepia = false;
+        let freq = false, waveform = false, noise = false, sepia = false, pause = true;
 		
 
         var controls = function(){
@@ -136,6 +141,7 @@
             
             console.log(poppyLogo);
         }
+
 		
 
                     
@@ -174,10 +180,12 @@
 				}
 
 				if (e.target.dataset.playing == "no") {
+                    pause = false;
 					audioElement.play();
 					e.target.dataset.playing = "yes";
 				// if track is playing pause it
 				} else if (e.target.dataset.playing == "yes") {
+                    pause = true;
 					audioElement.pause();
 					e.target.dataset.playing = "no";
 				}
@@ -264,6 +272,7 @@
 			let barHeight = 100;
 			let topSpacing = 50;
             drawRectangles(drawCtx, canvasElement);
+            drawPoppy(drawCtx,queenPicture,pause, canvasElement);
             
             let sum=0;
             
@@ -301,6 +310,7 @@
                 let percent = audioData[i] / 255;
                 let maxRadius = 200;
                 let circleRadius = percent * maxRadius * sliderValue/2;
+                drawCtx.globalAlpha = 1;
                 
                 if(i%3==0)
                 {
