@@ -34,6 +34,7 @@
 		
 		// 4 - our WebAudio context
 		let audioCtx;
+        let biquadFilter
 		
 		// 5 - nodes that are part of our WebAudio audio routing graph
 		let sourceNode, analyserNode, gainNode;
@@ -91,6 +92,15 @@
 			const AudioContext = window.AudioContext || window.webkitAudioContext;
 			audioCtx = new AudioContext();
 			
+            biquadFilter = audioCtx.createBiquadFilter();
+            biquadFilter.type="allpass";
+            
+            let osc = audioCtx.createOscillator();
+            //osc.setPerioditcWave()
+            
+            osc.frequency.setValueAtTime(440+cont.pitch*100, audioCtx.currentTime); // value in hertz
+            osc.connect(audioCtx.destination);
+            //osc.start();
 			// 2 - get a reference to the <audio> element on the page
 			audioElement = document.querySelector("audio");
 			audioElement.src = SOUND_PATH.sound3;
@@ -101,6 +111,10 @@
 			// 4 - create an analyser node
 			analyserNode = audioCtx.createAnalyser();
 			
+            
+            
+            biquadFilter.connect(analyserNode);
+
 			/*
 			We will request NUM_SAMPLES number of samples or "bins" spaced equally 
 			across the sound spectrum.
@@ -121,6 +135,10 @@
 			sourceNode.connect(analyserNode);
 			analyserNode.connect(gainNode);
 			gainNode.connect(audioCtx.destination);
+            
+            let source= audioCtx.createBufferSource();
+            source.connect(audioCtx.destination);
+            source.detune.value=500;
 		}
 		
 		function setupCanvas(){
@@ -148,7 +166,7 @@
 
         window.onload = function(){
             gui.add(cont,"circleRadius",0.5,3);
-            gui.add(cont,"pitch",-3,3);
+            gui.add(cont,"pitch",-300,300);
             gui.add(cont,"displayWaveform");
             gui.add(cont,"displayFrequency");
             gui.add(cont,"displaySepia");
@@ -165,6 +183,7 @@
         function changeSong(){
             console.log("changed song\n new audio src= media/"+cont.song+".mp3");
             audioElement.src="media/"+cont.song+".mp3";
+            audioElement.pitch
         }
 
 		function setupUI()
@@ -182,6 +201,7 @@
 				if (e.target.dataset.playing == "no") {
                     pause = false;
 					audioElement.play();
+                    
 					e.target.dataset.playing = "yes";
 				// if track is playing pause it
 				} else if (e.target.dataset.playing == "yes") {
@@ -189,9 +209,7 @@
 					audioElement.pause();
 					e.target.dataset.playing = "no";
 				}
-                
-                
-	
+              	
 			};
             
 //            document.querySelector('#sepiaCB').checked = sepia;
@@ -244,6 +262,9 @@
 			// this schedules a call to the update() method in 1/60 seconds
 			requestAnimationFrame(update);
 			
+            biquadFilter.detune.value=cont.pitch;
+            biquadFilter.frequency.setValueAtTime(1000, audioCtx.currentTime);
+            biquadFilter.gain.setValueAtTime(25, audioCtx.currentTime);
 			/*
 				Nyquist Theorem
 				http://whatis.techtarget.com/definition/Nyquist-Theorem
