@@ -28,9 +28,9 @@
 
 	#controls{
         position: absolute;
-		left: 40%;
-        right:40%;
-		top: 92%;
+		left: 10%;
+        right:0%;
+		top:90%;
         z-index: 7;
         
   }
@@ -39,11 +39,7 @@
   	margin-bottom:1em;
   }
   
-  #playButton{
-  	font-size: 1.2em;
-  	width: 3.5em;
-  }
-  
+
 	button[data-playing="yes"]:after{
 		content: "Pause";
 	}
