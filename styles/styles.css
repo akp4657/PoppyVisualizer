@@ -11,14 +11,16 @@
 	}
 
 
-    #mainCanavs{
+    #mainCanvas{
         position:absolute;
-        z-index: 1;
+        z-index: -1;
+        
     }
     
-    #logoCanavs{
+    #logoCanvas{
         position:absolute;
-        z-index: 2;
+        z-index: 1;
+        background-color: 'rgba(0,0,0,255)';
     }
 
   
@@ -28,6 +30,7 @@
         position: absolute;
 		left: 35%;
 		top: 92%;
+        z-index: 7;
         background-color: azure;
   }
   
