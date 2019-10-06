@@ -13,13 +13,13 @@
 
     #mainCanvas{
         position:absolute;
-        z-index: -1;
+        z-index: -2;
         
     }
     
     #logoCanvas{
         position:absolute;
-        z-index: 1;
+        z-index: -1;
         background-color: 'rgba(0,0,0,255)';
     }
 
@@ -28,10 +28,11 @@
 
 	#controls{
         position: absolute;
-		left: 35%;
+		left: 40%;
+        right:40%;
 		top: 92%;
         z-index: 7;
-        background-color: azure;
+        
   }
   
   section{
