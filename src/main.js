@@ -55,7 +55,8 @@
 
         var controls = function(){
             this.circleRadius =1;
-            this.pitch=1;
+            this.detune=1;
+            this.frequency=350;
             this.displayWaveform=false;
             this.displayFrequency=false;
             this.displaySepia=false;
@@ -73,9 +74,11 @@
 				// check if context is in suspended state (autoplay policy)
 				if (pause && audioCtx.state == "suspended") {
 					audioCtx.resume();
+                    drawLogo();
 				}
 
 				if (pause) {
+                    drawLogo();
                     pause = false;
 					audioElement.play();
 				// if track is playing pause it
@@ -83,6 +86,7 @@
                 else if (!pause) {
                     pause = true;
 					audioElement.pause();
+                    clearLogo();
 				}
                 
                 audioElement.onended =  _ => {
@@ -114,14 +118,12 @@
 			const AudioContext = window.AudioContext || window.webkitAudioContext;
 			audioCtx = new AudioContext();
 			
-            biquadFilter = audioCtx.createBiquadFilter();
-            biquadFilter.type="allpass";
-            
+           
             let osc = audioCtx.createOscillator();
             //osc.setPerioditcWave()
             
-            osc.frequency.setValueAtTime(440+cont.pitch*100, audioCtx.currentTime); // value in hertz
-            osc.connect(audioCtx.destination);
+//            osc.frequency.setValueAtTime(440+cont.pitch*100, audioCtx.currentTime); // value in hertz
+//            osc.connect(audioCtx.destination);
             //osc.start();
 			// 2 - get a reference to the <audio> element on the page
 			audioElement = document.querySelector("audio");
@@ -135,7 +137,7 @@
 			
             
             
-            biquadFilter.connect(analyserNode);
+//            biquadFilter.connect(analyserNode);
 
 			/*
 			We will request NUM_SAMPLES number of samples or "bins" spaced equally 
@@ -153,14 +155,23 @@
 			gainNode = audioCtx.createGain();
 			gainNode.gain.value = 1;
 			
+            
+            //setup the biquad
+            
+            biquadFilter = audioCtx.createBiquadFilter();
+            biquadFilter.type = "highpass";
+            biquadFilter.frequency.setValueAtTime(1000, audioCtx.currentTime);
+            biquadFilter.gain.setValueAtTime(25, audioCtx.currentTime);
+            
+            
 			// 6 - connect the nodes - we now have an audio graph
 			sourceNode.connect(analyserNode);
-			analyserNode.connect(gainNode);
+			analyserNode.connect(biquadFilter);
+            biquadFilter.connect(gainNode);
 			gainNode.connect(audioCtx.destination);
             
-            let source= audioCtx.createBufferSource();
-            source.connect(audioCtx.destination);
-            source.detune.value=500;
+            
+            
 		}
 		
 		function setupCanvas(){
@@ -176,19 +187,26 @@
             //logoCtx.clearRect(0,0,logoCanvasElement.width,logoCanvasElement.height);
            
             poppyLogo.addEventListener('load', e => {
-                logoCtx.drawImage(poppyLogo,logoCanvasElement.width/2-132,logoCanvasElement.height/2-125,264,204);
+                
             });
             
             console.log(poppyLogo);
         }
 
 		
-
+        function drawLogo(){
+            logoCtx.drawImage(poppyLogo,logoCanvasElement.width/2-132,logoCanvasElement.height/2-125,264,204);
+        }
                     
+
+        function clearLogo(){
+            logoCtx.clearRect(0,0,logoCanvasElement.width,logoCanvasElement.height);
+        }
 
         window.onload = function(){
             gui.add(cont,"circleRadius",0.5,3);
-            gui.add(cont,"pitch",-300,300);
+            gui.add(cont,"detune",0,3000);
+            gui.add(cont,"frequency",0,500);            
             gui.add(cont,"displayWaveform");
             gui.add(cont,"displayFrequency");
             gui.add(cont,"displaySepia");
@@ -284,9 +302,11 @@
 			// this schedules a call to the update() method in 1/60 seconds
 			requestAnimationFrame(update);
 			
-            biquadFilter.detune.value=cont.pitch;
-            biquadFilter.frequency.setValueAtTime(1000, audioCtx.currentTime);
-            biquadFilter.gain.setValueAtTime(25, audioCtx.currentTime);
+            
+//            biquadFilter.frequency.setValueAtTime(cont.pitch, audioCtx.currentTime);
+            biquadFilter.detune.value=cont.detune;
+            biquadFilter.frequency.value= cont.frequency;
+            
 			/*
 				Nyquist Theorem
 				http://whatis.techtarget.com/definition/Nyquist-Theorem
@@ -388,6 +408,14 @@
             // 28 - Get all of the rgba pixel data of the canvas by grabbing the ImageData Object
             let imageData = ctx.getImageData(0,0,ctx.canvas.width,ctx.canvas.height);
             
+            let logoImgData;
+            let logoData;
+            
+            if(cont.displaySepia)
+            {
+                logoImgData = logoCtx.getImageData(0,0,logoCtx.canvas.width,logoCtx.canvas.height);
+                logoData = logoImgData.data;
+            }
             // 29 = imageData.data is an 8-bit typed array - calues range from 0-255
             // imageData.data contains 4 values per pixel: 4 x canvas.width x canvas.height = 1,024,000 values 
             // Looping through this 60FPS
@@ -430,11 +458,29 @@
                     data[i+1] = outGreen < 255 ? outGreen : 255;
                     data[i+2] = outBlue < 255 ? outBlue : 255;
                     
+                    
+                    //FOR THE LOGO LAYER
+                    if(!pause)
+                    {
+                        let lOutRed, lOutGreen, lOutBlue;
+                        
+                        lOutRed = ((logoData[i] * .393) + (logoData[i+1] * .769) + (logoData[i+2] * .189));
+                        lOutGreen = ((logoData[i] * .349) + (logoData[i+1] * .686) + (logoData[i+2] * .168));
+                        lOutBlue = ((logoData[i] * .272) + (logoData[i+1] * .534) + (logoData[i+2] * .131));
+                        
+                        logoData[i] = lOutRed < 255 ? lOutRed : 255;
+                        logoData[i+1] = lOutGreen < 255 ? lOutGreen : 255;
+                        logoData[i+2] = lOutBlue < 255 ? lOutBlue : 255;
+                    }
+                    
+                    
                 }
             }
             
             // 32 - Put the modified data back on the canvas 
             ctx.putImageData(imageData, 0, 0);
+            if(cont.displaySepia&&!pause)
+                logoCtx.putImageData(logoImgData,0,0);
         }
 		
 		function requestFullscreen(element) {
