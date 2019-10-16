@@ -555,19 +555,20 @@
             console.log(progress.style.width);
             }
 		
+        //update logo layer
         function updateLogo() {
             
             if(cont.invertColors){
-                clearLogo();
+                                
             }
             if(cont.displaySepia){
-                progress.style.backgroundColor = 'rgb(112,66,20)';
+                
             }
             if(cont.displaySepia && cont.invertColors){
-                progress.style.backgroundColor = 'rgb(72,56,37)';
+                
             }
-            console.log(progress.style.width);
-            }
+            
+        }
 
 		function requestFullscreen(element) {
 			if (element.requestFullscreen) {
