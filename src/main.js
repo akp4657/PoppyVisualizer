@@ -56,8 +56,8 @@
         var controls = function(){
             this.circleRadius =1;
             this.detune=1;
-            this.frequency=350;
-            this.displayWaveform=true;
+//            this.frequency=350;
+            this.displayWaveform=false;
             this.displayFrequency=false;
             this.displaySepia=false;
             this.displayNoise=false;
@@ -160,8 +160,7 @@
             
             biquadFilter = audioCtx.createBiquadFilter();
             biquadFilter.type = "highpass";
-            biquadFilter.frequency.setValueAtTime(1000, audioCtx.currentTime);
-            biquadFilter.gain.setValueAtTime(25, audioCtx.currentTime);
+            
             
             
 			// 6 - connect the nodes - we now have an audio graph
@@ -206,7 +205,6 @@
         window.onload = function(){
             gui.add(cont,"circleRadius",0.5,3);
             gui.add(cont,"detune",0,3000);
-            gui.add(cont,"frequency",0,500);            
             gui.add(cont,"displayWaveform");
             gui.add(cont,"displayFrequency");
             gui.add(cont,"displaySepia");
@@ -305,7 +303,7 @@
             
 //            biquadFilter.frequency.setValueAtTime(cont.pitch, audioCtx.currentTime);
             biquadFilter.detune.value=cont.detune;
-            biquadFilter.frequency.value= cont.frequency;
+//            biquadFilter.frequency.value= cont.frequency;
             
 			/*
 				Nyquist Theorem
