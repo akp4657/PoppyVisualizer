@@ -88,6 +88,8 @@ function drawPoppy(ctx, picture, pause, canvas)
 
     ctx.save();
     ctx.globalAlpha = alpha;
+    picture.width/5;
+    picture.height/5;
     ctx.drawImage(picture,canvas.width/2-picture.width/2, canvas.height/2-picture.height/2);
     if(!pause){
         

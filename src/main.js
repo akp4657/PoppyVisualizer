@@ -47,9 +47,11 @@
         // Value for circle radius
         let circleSlider =0;
 
-        let triSlider = 0;
+        let triSlider = 1;
 
         let ctrlSlider = 0;
+
+        let volumeSlider = .5;
 
         let alpha = 1;
 
@@ -66,8 +68,8 @@
             this.triSize = 1;
             this.detune=0;
             this.ctrlSlider = 0;
+            this.volumeSlider = .5;
             this.displayWaveform=true;
-
             this.displayFrequency=false;
             this.displaySepia=false;
             this.displayNoise=false;
@@ -223,7 +225,7 @@
             gui.add(cont,"detune",0,3000);
             gui.add(cont,"triSize", 1, 100);
             gui.add(cont,"ctrlSlider",0,200);
-
+            gui.add(cont,"volumeSlider", 0,1);
             gui.add(cont,"displayWaveform");
             gui.add(cont,"displayFrequency");
             gui.add(cont,"displaySepia");
@@ -322,6 +324,7 @@
             triSlider = cont.triSize;
             circleSlider = cont.circleRadius;
             ctrlSlider = cont.ctrlSlider;
+            audioElement.volume = cont.volumeSlider;
             audioElement.addEventListener("timeupdate",updateProgress, false);
             
             
@@ -542,15 +545,15 @@
            // progress.style.width = value + "%";
             
             progress.style.width = value + "%";
-            progress.style.backgroundColor = 'rgb(190,0,0)';
+            progress.style.backgroundColor = 'rgb(190,0,0,.75)';
             if(cont.invertColors){
-                progress.style.backgroundColor = 'rgb(65,255,255)';
+                progress.style.backgroundColor = 'rgb(65,255,255,.75)';
             }
             if(cont.displaySepia){
-                progress.style.backgroundColor = 'rgb(112,66,20)';
+                progress.style.backgroundColor = 'rgb(112,66,20,.75)';
             }
             if(cont.displaySepia && cont.invertColors){
-                progress.style.backgroundColor = 'rgb(72,56,37)';
+                progress.style.backgroundColor = 'rgb(72,56,37,.75)';
             }
             console.log(progress.style.width);
             }
