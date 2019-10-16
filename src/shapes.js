@@ -1,5 +1,6 @@
 export {drawRectangles,drawCircles,drawTriangle,drawCurves,drawPoppy};
-// Background circles
+
+// Background rectangles
 function drawRectangles(ctx, canvas)
 {
     ctx.save();
@@ -13,12 +14,10 @@ function drawRectangles(ctx, canvas)
     ctx.restore();
 }
 
+// Draw Circles takes the paramaters to mess with its own values
 function drawCircles(ctx, canvas, audio, num, slider)
 {
-    // Get the wave bin (audiodata i )
-    // Have the radius bounce off a percentage of that 
-    // Make the circle solid 
-    /****The gradient colors are temporary****/
+    // Starting with two red gradients that are centered at the circle's center
     var grad = ctx.createRadialGradient((canvas.width*(2/5)),(canvas.height*(2/7)),audio[10]/12, (canvas.width*(2/5)),(canvas.height*(2/7)),(audio[14]/2)+slider);
     grad.addColorStop(0,'rgb(190,0,0)');
     grad.addColorStop(1/4,'rgb(178,34,34)');
@@ -34,6 +33,10 @@ function drawCircles(ctx, canvas, audio, num, slider)
     grad2.addColorStop(3/4,'rgb(128,0,0)');
     grad2.addColorStop(1,'rgb(0,0,0)');
 
+    // Draw the two circles,
+    // the idea is that they bounce 
+    // to Poppy's voice, she sits at around
+    // the 14 bin, but it changes with each song
     ctx.beginPath();
     ctx.fillStyle = grad; 
     ctx.arc((canvas.width*(2/5)),(canvas.height*(2/7)),(audio[14]/2.5)+slider,0,2*Math.PI, false);
@@ -48,8 +51,13 @@ function drawCircles(ctx, canvas, audio, num, slider)
                 
 }
 
+
+// Drawing the triangle with the same idea as the circle
 function drawTriangle(ctx, audio, canvas, num, slider)
 { 
+    // Slight transparency, because it's a cool effect
+    // We move to each point relative to the screen 
+    // adjusted by the slider to make it bigger
     ctx.beginPath();
     ctx.fillStyle = 'rgba(190,0,0,.34)';
     ctx.moveTo(canvas.width/2,(canvas.height/2-audio[num]/1.5)-slider);
@@ -60,6 +68,7 @@ function drawTriangle(ctx, audio, canvas, num, slider)
     ctx.stroke();
 }
 
+// Bezier curves, also adjusted to fit the screen it's on
 function drawCurves(ctx, audio, canvas, num, slider)
 {
     ctx.save();
@@ -80,28 +89,24 @@ function drawCurves(ctx, audio, canvas, num, slider)
 
 }
 
+// Drawing Poppy in the middle of the screen with some pause logic
+// Setting the alpha to one before this method so it doesn't reset each frame
 let alpha = 1;
 function drawPoppy(ctx, picture, pause, canvas)
 {
-    //ctx.clearRect(0,0,picture.width,picture.height);
-    //requestAnimationFrame(drawPoppy);
-
     ctx.save();
     ctx.globalAlpha = alpha;
-    picture.width/5;
-    picture.height/5;
     ctx.drawImage(picture,canvas.width/2-picture.width/2, canvas.height/2-picture.height/2);
+    
+    // Pause logic is just on a boolean from main 
     if(!pause){
-        
         alpha += -.01;
         if(alpha <=0 ) {alpha = 0; return;}
-
     }
+    
     if(pause){
-        
         alpha += .01;
         if(alpha >=1 ) {alpha = 1; return;}
-
     }
     ctx.restore();
 }
