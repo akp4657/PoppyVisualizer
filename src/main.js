@@ -219,6 +219,7 @@
             gui.add(cont,"detune",0,3000);
             gui.add(cont,"triSize", 1, 100);
             gui.add(cont,"ctrlSlider",0,200);
+
             gui.add(cont,"displayWaveform");
             gui.add(cont,"displayFrequency");
             gui.add(cont,"displaySepia");
