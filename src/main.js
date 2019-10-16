@@ -109,6 +109,7 @@
         }
 		
         let cont = new controls();
+       
 		// FUNCTIONS
 		function init(){
                         console.log("we in init");
@@ -116,6 +117,9 @@
 			setupWebaudio();
 			setupCanvas();
 			//setupUI();
+            
+            
+            
             
 			update();
 		}
@@ -373,7 +377,6 @@
                 if(cont.displayWaveform&&!pause)
                 {
                     //canvas waveform stuff here
-                    console.log("hmmm");
                     let percent = audioData[i]/255;
                     percent = percent < 0.02 ? .02 : percent;
                     //drawCtx.translate(BAR_WIDTH, 0);
@@ -434,7 +437,8 @@
 			}
             
             manipulatePixels(drawCtx);
-            
+            manipulatePixels(logoCtx);
+
             
 		} 
 		
@@ -451,14 +455,9 @@
             // 28 - Get all of the rgba pixel data of the canvas by grabbing the ImageData Object
             let imageData = ctx.getImageData(0,0,ctx.canvas.width,ctx.canvas.height);
             
-            let logoImgData;
-            let logoData;
+//            let logoImgData = logoCtx.getImageData(0,0,logoCtx.canvas.width,logoCtx.canvas.height);
+//            let logoData = logoImgData.data;
             
-            if(cont.displaySepia)
-            {
-                logoImgData = logoCtx.getImageData(0,0,logoCtx.canvas.width,logoCtx.canvas.height);
-                logoData = logoImgData.data;
-            }
             // 29 = imageData.data is an 8-bit typed array - calues range from 0-255
             // imageData.data contains 4 values per pixel: 4 x canvas.width x canvas.height = 1,024,000 values 
             // Looping through this 60FPS
@@ -484,6 +483,11 @@
                     data[i] = 255 - red;
                     data[i+1] = 255 - green;
                     data[i+2] = 255 - blue;
+                    
+//                    let lRed = logoData[i], lGreen = logoData[i+1], lBlue = logoData[i+2];
+//                    logoData[i] = 255 - lRed;
+//                    logoData[i+1] = 255 - lGreen;
+//                    logoData[i+2] = 255 - lBlue;
                 }
                 
                 // 33 - Noise 
@@ -511,27 +515,24 @@
                     
                     
                     //FOR THE LOGO LAYER
-                    if(!pause)
-                    {
-                        let lOutRed, lOutGreen, lOutBlue;
-                        
-                        lOutRed = ((logoData[i] * .393) + (logoData[i+1] * .769) + (logoData[i+2] * .189));
-                        lOutGreen = ((logoData[i] * .349) + (logoData[i+1] * .686) + (logoData[i+2] * .168));
-                        lOutBlue = ((logoData[i] * .272) + (logoData[i+1] * .534) + (logoData[i+2] * .131));
-                        
-                        logoData[i] = lOutRed < 255 ? lOutRed : 255;
-                        logoData[i+1] = lOutGreen < 255 ? lOutGreen : 255;
-                        logoData[i+2] = lOutBlue < 255 ? lOutBlue : 255;
-                    }
-                    
-                    
-                }
+//                    if(!pause)
+//                    {
+//                        let lOutRed, lOutGreen, lOutBlue;
+//                        
+//                        lOutRed = ((logoData[i] * .393) + (logoData[i+1] * .769) + (logoData[i+2] * .189));
+//                        lOutGreen = ((logoData[i] * .349) + (logoData[i+1] * .686) + (logoData[i+2] * .168));
+//                        lOutBlue = ((logoData[i] * .272) + (logoData[i+1] * .534) + (logoData[i+2] * .131));
+//                        
+//                        logoData[i] = lOutRed < 255 ? lOutRed : 255;
+//                        logoData[i+1] = lOutGreen < 255 ? lOutGreen : 255;
+//                        logoData[i+2] = lOutBlue < 255 ? lOutBlue : 255;
+//                    }
+                 }               
             }
             
             // 32 - Put the modified data back on the canvas 
             ctx.putImageData(imageData, 0, 0);
-            if(cont.displaySepia&&!pause)
-                logoCtx.putImageData(logoImgData,0,0);
+            
         }
 
         function updateProgress() {
@@ -554,6 +555,20 @@
             console.log(progress.style.width);
             }
 		
+        function updateLogo() {
+            
+            if(cont.invertColors){
+                clearLogo();
+            }
+            if(cont.displaySepia){
+                progress.style.backgroundColor = 'rgb(112,66,20)';
+            }
+            if(cont.displaySepia && cont.invertColors){
+                progress.style.backgroundColor = 'rgb(72,56,37)';
+            }
+            console.log(progress.style.width);
+            }
+
 		function requestFullscreen(element) {
 			if (element.requestFullscreen) {
 			  element.requestFullscreen();
