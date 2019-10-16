@@ -45,7 +45,11 @@
 		let audioData = new Uint8Array(NUM_SAMPLES/2); 
         
         // Value for circle radius
-        let sliderValue =1;
+        let circleSlider =0;
+
+        let triSlider = 0;
+
+        let ctrlSlider = 0;
 
         let alpha = 1;
         
@@ -54,13 +58,15 @@
 		
 
         var controls = function(){
-            this.circleRadius =1;
-            this.detune=1;
+            this.circleRadius =0;
 //            this.frequency=350;
+            this.triSize = 0;
+            this.detune=0;
             this.displayWaveform=false;
             this.displayFrequency=false;
             this.displaySepia=false;
             this.displayNoise=false;
+            this.invertColors=false;
             this.song='Hard Feelings';
             
             this.fullScreen = function()
@@ -203,12 +209,14 @@
         }
 
         window.onload = function(){
-            gui.add(cont,"circleRadius",0.5,3);
+            gui.add(cont,"circleRadius",0,100);
             gui.add(cont,"detune",0,3000);
+            gui.add(cont,"triSize", 0, 100);
             gui.add(cont,"displayWaveform");
             gui.add(cont,"displayFrequency");
             gui.add(cont,"displaySepia");
             gui.add(cont,"displayNoise");
+            gui.add(cont,"invertColors");
             gui.add(cont,"song",['Hard Feelings', 'Concrete', 'Metal']).onChange(changeSong);
             gui.add(cont,"fullScreen");
             gui.add(cont,"play");
@@ -268,13 +276,6 @@
 ////				playButton.dispatchEvent(new MouseEvent("click"));
 ////			};
 ////            
-//            // Radius Slider 
-////            let radiusSlider = document.querySelector("#radiusSlider");
-////            radiusSlider.oninput = e => 
-////            {
-////                sliderValue = e.target.value;
-////                radiusLabel.innerHTML = sliderValue;
-////            }
 //			
 //    //			//fullscreen button
 //    //            let fullscreenButton = document.querySelector("#fullscreen");
@@ -304,6 +305,9 @@
 //            biquadFilter.frequency.setValueAtTime(cont.pitch, audioCtx.currentTime);
             biquadFilter.detune.value=cont.detune;
 //            biquadFilter.frequency.value= cont.frequency;
+            triSlider = cont.triSize;
+            circleSlider = cont.circleRadius;
+            
             
 			/*
 				Nyquist Theorem
@@ -370,18 +374,18 @@
                 /* Drawing Circles */ 
                 let percent = audioData[i] / 255;
                 let maxRadius = 200;
-                let circleRadius = percent * maxRadius * sliderValue/2;
+                //let circleRadius = percent * maxRadius * sliderValue/2;
                 drawCtx.globalAlpha = 1;
                 
                 if(i%3==0)
                 {
-                    drawCircles(drawCtx, canvasElement, audioData, i);
+                    drawCircles(drawCtx, canvasElement, audioData, i, circleSlider);
                 }
                 
                 if(i%4==    0)
                     drawCurves(drawCtx, audioData, canvasElement, i);
 
-                drawTriangle(drawCtx, audioData,canvasElement, i);
+                drawTriangle(drawCtx, audioData,canvasElement, i, triSlider);
                 
             
                 sum+=audioData[i];
@@ -432,6 +436,14 @@
             for(i=0; i<length; i+=4)
             {
                 
+                // 32 - Invert colors
+                if(cont.invertColors)
+                {
+                    let red = data[i], green = data[i+1], blue = data[i+2];
+                    data[i] = 255 - red;
+                    data[i+1] = 255 - green;
+                    data[i+2] = 255 - blue;
+                }
                 
                 // 33 - Noise 
                 if(cont.displayNoise && Math.random() < .10)
