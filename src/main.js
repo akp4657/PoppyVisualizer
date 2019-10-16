@@ -15,7 +15,7 @@
 
         const BAR_WIDTH = 2;
         const MAX_BAR_HEIGHT = 100;
-        const PADDING = 1;
+        const PADDING = 0.5;
 
         const poppyLogo = new Image();
  		poppyLogo.src = "media/poppyLogo.png";
@@ -57,7 +57,7 @@
             this.circleRadius =1;
             this.detune=1;
 //            this.frequency=350;
-            this.displayWaveform=false;
+            this.displayWaveform=true;
             this.displayFrequency=false;
             this.displaySepia=false;
             this.displayNoise=false;
@@ -328,7 +328,7 @@
             
 			// DRAW!
 			//drawCtx.clearRect(0,0,800,600);  
-			let barWidth = 4;
+			let barWidth = 2;
 			let barSpacing = 1;
 			let barHeight = 100;
 			let topSpacing = 50;
@@ -354,7 +354,7 @@
                 }
                 
                 // show waveform
-                if(cont.displayWaveform)
+                if(cont.displayWaveform&&!pause)
                 {
                     //canvas waveform stuff here
                     
@@ -362,8 +362,11 @@
                     percent = percent < 0.02 ? .02 : percent;
                     //drawCtx.translate(BAR_WIDTH, 0);
                     drawCtx.save();
+                    drawCtx.translate(325,0);
+                    drawCtx.rotate(59*Math.PI/180);
+                    drawCtx.translate(425,0);
+                    drawCtx.scale(1,-1);
                     drawCtx.fillRect(barWidth*i+i*PADDING,0,BAR_WIDTH,MAX_BAR_HEIGHT*percent);
-                    
                     drawCtx.restore();
                     //drawCtx.translate(PADDING,0);
                 }
