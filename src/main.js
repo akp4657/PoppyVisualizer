@@ -350,7 +350,7 @@
 
             
 			// DRAW!
-			//drawCtx.clearRect(0,0,800,600);  
+			drawCtx.clearRect(0,0,800,600);  
 			let barWidth = 3;
 			let barSpacing = 1;
 			let barHeight = 100;
