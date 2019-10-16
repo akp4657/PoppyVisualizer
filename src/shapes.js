@@ -58,23 +58,22 @@ function drawTriangle(ctx, audio, canvas, num, slider)
     ctx.fill();
     ctx.closePath();
     ctx.stroke();
-
 }
 
-function drawCurves(ctx, audio, canvas, num)
+function drawCurves(ctx, audio, canvas, num, slider)
 {
     ctx.save();
     ctx.lineWidth="3";
     ctx.strokeStyle = "black";
     ctx.beginPath();
     ctx.moveTo(canvas.width/2, 0);
-    ctx.quadraticCurveTo(-audio[num]*2, canvas.height/2, canvas.width/2, canvas.height);
+    ctx.quadraticCurveTo((-audio[num]*2)-slider, canvas.height/2, canvas.width/2, canvas.height);
     ctx.stroke();
     
     ctx.strokeStyle = "white";
     ctx.beginPath();
     ctx.moveTo(canvas.width/2, canvas.height);
-    ctx.quadraticCurveTo((canvas.width/(17/18))+(audio[num]*2), canvas.height/2, canvas.width/2, 0);
+    ctx.quadraticCurveTo(((canvas.width/(17/18))+(audio[num]*2)+slider), canvas.height/2, canvas.width/2, 0);
     ctx.stroke();
     ctx.restore();
     
