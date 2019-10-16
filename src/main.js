@@ -13,7 +13,7 @@
 		});
 		
 
-        const BAR_WIDTH = 2;
+        const BAR_WIDTH = 1;
         const MAX_BAR_HEIGHT = 100;
         const PADDING = 1;
 
@@ -60,9 +60,9 @@
         var controls = function(){
             this.circleRadius =0;
 //            this.frequency=350;
-            this.triSize = 0;
+            this.triSize = 1;
             this.detune=0;
-            this.displayWaveform=false;
+            this.displayWaveform=true;
             this.displayFrequency=false;
             this.displaySepia=false;
             this.displayNoise=false;
@@ -211,7 +211,7 @@
         window.onload = function(){
             gui.add(cont,"circleRadius",0,100);
             gui.add(cont,"detune",0,3000);
-            gui.add(cont,"triSize", 0, 100);
+            gui.add(cont,"triSize", 1, 100);
             gui.add(cont,"displayWaveform");
             gui.add(cont,"displayFrequency");
             gui.add(cont,"displaySepia");
@@ -332,7 +332,7 @@
             
 			// DRAW!
 			//drawCtx.clearRect(0,0,800,600);  
-			let barWidth = 4;
+			let barWidth = 3;
 			let barSpacing = 1;
 			let barHeight = 100;
 			let topSpacing = 50;
@@ -358,17 +358,45 @@
                 }
                 
                 // show waveform
-                if(cont.displayWaveform)
+                if(cont.displayWaveform&&!pause)
                 {
                     //canvas waveform stuff here
-                    
+                    console.log("hmmm");
                     let percent = audioData[i]/255;
                     percent = percent < 0.02 ? .02 : percent;
                     //drawCtx.translate(BAR_WIDTH, 0);
+                    drawCtx.fillStyle = 'red';
+                    
+                    //first waveform
                     drawCtx.save();
+                    drawCtx.translate(canvasElement.width/2,canvasElement.height/3);
+                    drawCtx.translate(0,50-cont.triSize);
+                    drawCtx.rotate(60*Math.PI/180);
+                    drawCtx.translate(-30,-15);
+                    drawCtx.scale(((100+cont.triSize)/215),-1);
                     drawCtx.fillRect(barWidth*i+i*PADDING,0,BAR_WIDTH,MAX_BAR_HEIGHT*percent);
                     drawCtx.restore();
                     //drawCtx.translate(PADDING,0);
+                    
+                    //second waveform
+                    drawCtx.save();
+                    drawCtx.translate(canvasElement.width/2-cont.triSize*0.9,canvasElement.height/3+cont.triSize*0.3);
+                    drawCtx.scale(1,-1);
+                    drawCtx.rotate(-302*Math.PI/180);
+                    drawCtx.translate(-325-(cont.triSize/20),-12);
+                    drawCtx.scale(((100+cont.triSize)/215),1);
+                    drawCtx.fillRect(barWidth*i+i*(PADDING),0,BAR_WIDTH*(1+cont.triSize*0.01),MAX_BAR_HEIGHT*percent);
+                    drawCtx.restore();
+                    
+                    //third waveform
+                    drawCtx.save();
+                    drawCtx.translate(canvasElement.width/2,canvasElement.height/2);
+                    drawCtx.rotate(Math.PI);
+                    drawCtx.translate(-160-cont.triSize,-95-cont.triSize*0.5);
+                    drawCtx.scale(((100+cont.triSize)/210),-1);
+                    
+                    drawCtx.fillRect(barWidth*i+i*PADDING,0,BAR_WIDTH,MAX_BAR_HEIGHT*percent);
+                    drawCtx.restore();
                 }
                 
                 /* Drawing Circles */ 
