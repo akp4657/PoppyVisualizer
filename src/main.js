@@ -351,6 +351,9 @@
             
 			// DRAW!
 			drawCtx.clearRect(0,0,800,600);  
+			logoCtx.clearRect(0,0,canvasElement.width,canvasElement.height);
+            if(!pause)
+                drawLogo();
 			let barWidth = 3;
 			let barSpacing = 1;
 			let barHeight = 100;
@@ -440,7 +443,7 @@
 			}
             
             manipulatePixels(drawCtx);
-            manipulatePixels(logoCtx);
+            
 
             
 		} 
@@ -458,9 +461,14 @@
             // 28 - Get all of the rgba pixel data of the canvas by grabbing the ImageData Object
             let imageData = ctx.getImageData(0,0,ctx.canvas.width,ctx.canvas.height);
             
-//            let logoImgData = logoCtx.getImageData(0,0,logoCtx.canvas.width,logoCtx.canvas.height);
-//            let logoData = logoImgData.data;
+            let logoImgData;
+            let logoData;
             
+            if(!pause)
+            {
+                logoImgData = logoCtx.getImageData(0,0,logoCtx.canvas.width,logoCtx.canvas.height);
+                logoData = logoImgData.data;
+            }
             // 29 = imageData.data is an 8-bit typed array - calues range from 0-255
             // imageData.data contains 4 values per pixel: 4 x canvas.width x canvas.height = 1,024,000 values 
             // Looping through this 60FPS
@@ -487,10 +495,15 @@
                     data[i+1] = 255 - green;
                     data[i+2] = 255 - blue;
                     
-//                    let lRed = logoData[i], lGreen = logoData[i+1], lBlue = logoData[i+2];
-//                    logoData[i] = 255 - lRed;
-//                    logoData[i+1] = 255 - lGreen;
-//                    logoData[i+2] = 255 - lBlue;
+                    if(!pause)
+                        {
+                            let lRed = logoData[i], lGreen = logoData[i+1], lBlue = logoData[i+2];
+
+                            
+                            logoData[i] = 255- lRed;
+                            logoData[i+1] = 255-lGreen;
+                            logoData[i+2] = 255 - lBlue;
+                        }
                 }
                 
                 // 33 - Noise 
@@ -518,24 +531,27 @@
                     
                     
                     //FOR THE LOGO LAYER
-//                    if(!pause)
-//                    {
-//                        let lOutRed, lOutGreen, lOutBlue;
-//                        
-//                        lOutRed = ((logoData[i] * .393) + (logoData[i+1] * .769) + (logoData[i+2] * .189));
-//                        lOutGreen = ((logoData[i] * .349) + (logoData[i+1] * .686) + (logoData[i+2] * .168));
-//                        lOutBlue = ((logoData[i] * .272) + (logoData[i+1] * .534) + (logoData[i+2] * .131));
-//                        
-//                        logoData[i] = lOutRed < 255 ? lOutRed : 255;
-//                        logoData[i+1] = lOutGreen < 255 ? lOutGreen : 255;
-//                        logoData[i+2] = lOutBlue < 255 ? lOutBlue : 255;
-//                    }
-                 }               
+                    if(!pause)
+                    {
+                        let lOutRed, lOutGreen, lOutBlue;
+                        
+                        lOutRed = ((logoData[i] * .393) + (logoData[i+1] * .769) + (logoData[i+2] * .189));
+                        lOutGreen = ((logoData[i] * .349) + (logoData[i+1] * .686) + (logoData[i+2] * .168));
+                        lOutBlue = ((logoData[i] * .272) + (logoData[i+1] * .534) + (logoData[i+2] * .131));
+                        
+                        logoData[i] = lOutRed < 255 ? lOutRed : 255;
+                        logoData[i+1] = lOutGreen < 255 ? lOutGreen : 255;
+                        logoData[i+2] = lOutBlue < 255 ? lOutBlue : 255;
+                    }
+                    
+                    
+                }
             }
             
             // 32 - Put the modified data back on the canvas 
             ctx.putImageData(imageData, 0, 0);
-            
+            if(!pause)
+                logoCtx.putImageData(logoImgData,0,0);
         }
 
         function updateProgress() {
