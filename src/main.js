@@ -44,17 +44,15 @@
 		// create a new array of 8-bit integers (0-255)
 		let audioData = new Uint8Array(NUM_SAMPLES/2); 
         
-        // Value for circle radius
+        // Values for sliders and the alpha value
         let circleSlider =0;
-
         let triSlider = 1;
-
         let ctrlSlider = 0;
-
         let volumeSlider = .5;
-
         let alpha = 1;
 
+        // Progress bar values
+        var progressBar = document.querySelector("#progressBar");
         var progress = document.querySelector("#progress");
         var value = 0;
         
@@ -69,6 +67,7 @@
             this.detune=0;
             this.ctrlSlider = 0;
             this.volumeSlider = .5;
+            this.displayProgress = false;
             this.displayWaveform=true;
             this.displayFrequency=false;
             this.displaySepia=false;
@@ -78,11 +77,15 @@
             
             this.fullScreen = function()
             {
+                // For some reason, only if the audioElement is full screen, the entire thing goes with it
                 //requestFullscreen(canvasElement);
                 //requestFullscreen(logoCanvasElement);
                 requestFullscreen(audioElement);
 
             }
+            
+            // Logic for drawing the logo and pausing with datGui
+            // Very similar to the HW code, but is refactored for the library
             this.play = function(){
                 console.log(`audioCtx.state = ${audioCtx.state}`);
 				
@@ -110,8 +113,8 @@
             }
         }
 		
+        // Controls for the gui, this allows us to add things to it
         let cont = new controls();
-       
 		// FUNCTIONS
 		function init(){
                         console.log("we in init");
@@ -191,6 +194,9 @@
 			canvasElement = document.querySelector('#mainCanvas');
 			drawCtx = canvasElement.getContext("2d");
             setupLogo();
+            
+            // Set the height and width to be relative to the screen.
+            // "Responsive"
             canvasElement.height = window.innerHeight;
             canvasElement.width = window.innerWidth;
             logoCanvasElement.height = window.innerHeight;
@@ -221,6 +227,7 @@
         }
 
         window.onload = function(){
+            // This adds the sliders and boxes to the datGui itself
             gui.add(cont,"circleRadius",0,100);
             gui.add(cont,"detune",0,3000);
             gui.add(cont,"triSize", 1, 100);
@@ -233,11 +240,11 @@
             gui.add(cont,"invertColors");
             gui.add(cont,"song",['Hard Feelings', 'Concrete', 'Metal']).onChange(changeSong);
             gui.add(cont,"fullScreen");
+            gui.add(cont,"displayProgress");
             gui.add(cont,"play");
         }
-            
-            
-
+        
+        // Changing the song to work with datGui
         function changeSong(){
             console.log("changed song\n new audio src= media/"+cont.song+".mp3");
             audioElement.src="media/"+cont.song+".mp3";
@@ -318,14 +325,21 @@
 			requestAnimationFrame(update);
 			
             
-//            biquadFilter.frequency.setValueAtTime(cont.pitch, audioCtx.currentTime);
             biquadFilter.detune.value=cont.detune;
-//            biquadFilter.frequency.value= cont.frequency;
+            
+            // Set the slider values and update the progress bar
             triSlider = cont.triSize;
             circleSlider = cont.circleRadius;
             ctrlSlider = cont.ctrlSlider;
             audioElement.volume = cont.volumeSlider;
             audioElement.addEventListener("timeupdate",updateProgress, false);
+            
+            if(!cont.displayProgress){
+                progressBar.style.opacity = 0;
+            }
+            else if(cont.displayProgress){
+                progressBar.style.opacity = 1;
+            }
             
             
 			/*
@@ -421,31 +435,22 @@
                 }
                 
                 /* Drawing Circles */ 
-                let percent = audioData[i] / 255;
-                let maxRadius = 200;
-                //let circleRadius = percent * maxRadius * sliderValue/2;
                 drawCtx.globalAlpha = 1;
                 
-                if(i%3==0)
-                {
-                    drawCircles(drawCtx, canvasElement, audioData, i, circleSlider);
-                }
+                // Drawing the circles
+                drawCircles(drawCtx, canvasElement, audioData, i, circleSlider);
                 
-                if(i%10==    0)
+                // Drawing the curves, but not on every i
+                // This allows us to limit the curves
+                if(i%10==0){
                     drawCurves(drawCtx, audioData, canvasElement, i, ctrlSlider);
+                }
 
                 drawTriangle(drawCtx, audioData,canvasElement, i, triSlider);
-                
-                
-            
-                sum+=audioData[i];
-				
-			}
-            
-            manipulatePixels(drawCtx);
-            
 
-            
+                sum+=audioData[i];
+			}
+            manipulatePixels(drawCtx);
 		} 
 		
 		
@@ -543,8 +548,6 @@
                         logoData[i+1] = lOutGreen < 255 ? lOutGreen : 255;
                         logoData[i+2] = lOutBlue < 255 ? lOutBlue : 255;
                     }
-                    
-                    
                 }
             }
             
@@ -554,13 +557,18 @@
                 logoCtx.putImageData(logoImgData,0,0);
         }
 
+        // Progress bar logic
+        // https://www.adobe.com/devnet/archive/html5/articles/html5-multimedia-pt3.html
         function updateProgress() {
             if (audioElement.currentTime > 0) {
                 value = Math.floor((100 / audioElement.duration) * audioElement.currentTime);
             }
-           // progress.style.width = value + "%";
             
             progress.style.width = value + "%";
+            
+            // The new thing we did was adding the colors for the progress bar to match 
+            // what is happening on screen. The original color is red, so just adjusting 
+            // the values gave us the effect we wanted.
             progress.style.backgroundColor = 'rgb(190,0,0,.75)';
             if(cont.invertColors){
                 progress.style.backgroundColor = 'rgb(65,255,255,.75)';
@@ -571,7 +579,6 @@
             if(cont.displaySepia && cont.invertColors){
                 progress.style.backgroundColor = 'rgb(72,56,37,.75)';
             }
-            console.log(progress.style.width);
             }
 		
         //update logo layer
