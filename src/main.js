@@ -1,7 +1,17 @@
     import {drawCircles,drawRectangles,drawTriangle, drawCurves,drawPoppy} from './shapes.js';
     export {init};
     
-   var gui = new dat.GUI();
+    var gui = new dat.GUI();
+
+    //Setting up our folder heirarchy
+    var folder1 = gui.addFolder('Visuals');
+    var folder3 = gui.addFolder('Audio Effects')
+    var folder2 = gui.addFolder('Song Choice');
+    var folder4 = folder2.addFolder('Singles');
+    var folder5 = folder2.addFolder('Choke');
+    var folder6 = folder2.addFolder('Poppy.Computer');
+    var folder7 = folder2.addFolder('Am I a Girl?');
+
     //const gui = new dat.GUI();		
 		// SCRIPT SCOPED VARIABLES
 				
@@ -228,19 +238,19 @@
 
         window.onload = function(){
             // This adds the sliders and boxes to the datGui itself
-            gui.add(cont,"circleRadius",0,100);
-            gui.add(cont,"detune",0,3000);
-            gui.add(cont,"triSize", 1, 100);
-            gui.add(cont,"ctrlSlider",0,200);
-            gui.add(cont,"volumeSlider", 0,1);
-            gui.add(cont,"displayWaveform");
-            gui.add(cont,"displayFrequency");
-            gui.add(cont,"displaySepia");
-            gui.add(cont,"displayNoise");
-            gui.add(cont,"invertColors");
+            folder1.add(cont,"circleRadius",0,100);
+            folder1.add(cont,"triSize", 1, 100);
+            folder1.add(cont,"ctrlSlider",0,200);
+            folder1.add(cont,"displayWaveform");
+            folder1.add(cont,"displayFrequency");
+            folder1.add(cont,"displaySepia");
+            folder1.add(cont,"displayNoise");
+            folder1.add(cont,"invertColors");
+            folder1.add(cont,"displayProgress");
+            folder3.add(cont,"detune",0,3000);
+            folder3.add(cont,"volumeSlider", 0,1);
             gui.add(cont,"song",['Hard Feelings', 'Concrete', 'Metal']).onChange(changeSong);
             gui.add(cont,"fullScreen");
-            gui.add(cont,"displayProgress");
             gui.add(cont,"play");
         }
         
