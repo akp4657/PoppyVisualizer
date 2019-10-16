@@ -47,7 +47,7 @@
         // Value for circle radius
         let circleSlider =0;
 
-        let triSlider = 0;
+        let triSlider = 1;
 
         let ctrlSlider = 0;
 
