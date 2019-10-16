@@ -13,13 +13,13 @@ function drawRectangles(ctx, canvas)
     ctx.restore();
 }
 
-function drawCircles(ctx, canvas, audio, num)
+function drawCircles(ctx, canvas, audio, num, slider)
 {
     // Get the wave bin (audiodata i )
     // Have the radius bounce off a percentage of that 
     // Make the circle solid 
     /****The gradient colors are temporary****/
-    var grad = ctx.createRadialGradient((canvas.width*(2/5)),(canvas.height*(2/7)),audio[10]/12, (canvas.width*(2/5)),(canvas.height*(2/7)),audio[14]/2);
+    var grad = ctx.createRadialGradient((canvas.width*(2/5)),(canvas.height*(2/7)),audio[10]/12, (canvas.width*(2/5)),(canvas.height*(2/7)),(audio[14]/2)+slider);
     grad.addColorStop(0,'rgb(190,0,0)');
     grad.addColorStop(1/4,'rgb(178,34,34)');
     grad.addColorStop(2/4,'rgb(139,0,0)');
@@ -27,7 +27,7 @@ function drawCircles(ctx, canvas, audio, num)
     grad.addColorStop(1,'rgb(0,0,0)');
 
     
-    var grad2 = ctx.createRadialGradient((canvas.width*(3/5)),(canvas.height*(2/7)),audio[10]/12, (canvas.width*(3/5)),(canvas.height*(2/7)),audio[14]/2);
+    var grad2 = ctx.createRadialGradient((canvas.width*(3/5)),(canvas.height*(2/7)),audio[10]/12, (canvas.width*(3/5)),(canvas.height*(2/7)),(audio[14]/2)+slider);
     grad2.addColorStop(0,'rgb(190,0,0)');
     grad2.addColorStop(1/4,'rgb(178,34,34)');
     grad2.addColorStop(2/4,'rgb(139,0,0)');
@@ -36,25 +36,25 @@ function drawCircles(ctx, canvas, audio, num)
 
     ctx.beginPath();
     ctx.fillStyle = grad; 
-    ctx.arc((canvas.width*(2/5)),(canvas.height*(2/7)),audio[14]/2.5,0,2*Math.PI, false);
+    ctx.arc((canvas.width*(2/5)),(canvas.height*(2/7)),(audio[14]/2.5)+slider,0,2*Math.PI, false);
     ctx.fill();
     ctx.closePath();
     
     ctx.beginPath();
     ctx.fillStyle = grad2; 
-    ctx.arc((canvas.width*(3/5)),(canvas.height*(2/7)),audio[14]/2.5,0,2*Math.PI, false);
+    ctx.arc((canvas.width*(3/5)),(canvas.height*(2/7)),(audio[14]/2.5)+slider,0,2*Math.PI, false);
     ctx.fill();
     ctx.closePath();
                 
 }
 
-function drawTriangle(ctx, audio, canvas, num)
+function drawTriangle(ctx, audio, canvas, num, slider)
 { 
     ctx.beginPath();
     ctx.fillStyle = 'rgba(190,0,0,.34)';
-    ctx.moveTo(canvas.width/2,canvas.height/2-audio[num]/1.5);
-    ctx.lineTo(canvas.width/2-audio[num]/1.5,canvas.height/2+(audio[num]/2.5)); 
-    ctx.lineTo(canvas.width/2+audio[num]/1.5,canvas.height/2+(audio[num]/2.5));
+    ctx.moveTo(canvas.width/2,(canvas.height/2-audio[num]/1.5)-slider);
+    ctx.lineTo((canvas.width/2-audio[num]/1.5)-slider,(canvas.height/2+(audio[num]/2.5))+(slider/2)); 
+    ctx.lineTo((canvas.width/2+audio[num]/1.5)+slider,(canvas.height/2+(audio[num]/2.5))+(slider/2));
     ctx.fill();
     ctx.closePath();
     ctx.stroke();
