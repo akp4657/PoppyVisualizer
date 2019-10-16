@@ -52,6 +52,9 @@
         let ctrlSlider = 0;
 
         let alpha = 1;
+
+        var progress = document.querySelector("#progress");
+        var value = 0;
         
 
         let freq = false, waveform = false, noise = false, sepia = false, pause = true;
@@ -62,6 +65,7 @@
 //            this.frequency=350;
             this.triSize = 0;
             this.detune=0;
+            this.ctrlSlider = 0;
             this.displayWaveform=false;
             this.displayFrequency=false;
             this.displaySepia=false;
@@ -71,7 +75,9 @@
             
             this.fullScreen = function()
             {
-                requestFullscreen(canvasElement);
+                //requestFullscreen(canvasElement);
+                //requestFullscreen(logoCanvasElement);
+                requestFullscreen(audioElement);
 
             }
             this.play = function(){
@@ -109,11 +115,6 @@
 			setupWebaudio();
 			setupCanvas();
 			//setupUI();
-			
-            canvasElement.height = window.innerHeight;
-            canvasElement.width = window.innerWidth;
-            logoCanvasElement.height = window.innerHeight;
-            logoCanvasElement.width = window.innerWidth;
             
 			update();
 		}
@@ -183,6 +184,10 @@
 			canvasElement = document.querySelector('#mainCanvas');
 			drawCtx = canvasElement.getContext("2d");
             setupLogo();
+            canvasElement.height = window.innerHeight;
+            canvasElement.width = window.innerWidth;
+            logoCanvasElement.height = window.innerHeight;
+            logoCanvasElement.width = window.innerWidth;
 		} 
 
         function setupLogo(){
@@ -212,6 +217,7 @@
             gui.add(cont,"circleRadius",0,100);
             gui.add(cont,"detune",0,3000);
             gui.add(cont,"triSize", 0, 100);
+            gui.add(cont,"ctrlSlider",0,200);
             gui.add(cont,"displayWaveform");
             gui.add(cont,"displayFrequency");
             gui.add(cont,"displaySepia");
@@ -234,9 +240,11 @@
 //		function setupUI()
 //        {
 //            console.log("in setup UI");
-			playButton = document.querySelector("#audioControls");
-			playButton.onclick= e => {
-				console.log(`audioCtx.state = ${audioCtx.state}`)};
+//			playButton = document.querySelector("#audioControls");
+//			playButton.onclick= e => {
+//				console.log(`audioCtx.state = ${audioCtx.state}`)};
+
+
 				
 //				// check if context is in suspended state (autoplay policy)
 //				if (audioCtx.state == "suspended") {
@@ -307,6 +315,8 @@
 //            biquadFilter.frequency.value= cont.frequency;
             triSlider = cont.triSize;
             circleSlider = cont.circleRadius;
+            ctrlSlider = cont.ctrlSlider;
+            audioElement.addEventListener("timeupdate",updateProgress, false);
             
             
 			/*
@@ -382,10 +392,11 @@
                     drawCircles(drawCtx, canvasElement, audioData, i, circleSlider);
                 }
                 
-                if(i%4==    0)
-                    drawCurves(drawCtx, audioData, canvasElement, i);
+                if(i%10==    0)
+                    drawCurves(drawCtx, audioData, canvasElement, i, ctrlSlider);
 
                 drawTriangle(drawCtx, audioData,canvasElement, i, triSlider);
+                
                 
             
                 sum+=audioData[i];
@@ -492,6 +503,26 @@
             if(cont.displaySepia&&!pause)
                 logoCtx.putImageData(logoImgData,0,0);
         }
+
+        function updateProgress() {
+            if (audioElement.currentTime > 0) {
+                value = Math.floor((100 / audioElement.duration) * audioElement.currentTime);
+            }
+           // progress.style.width = value + "%";
+            
+            progress.style.width = value + "%";
+            progress.style.backgroundColor = 'rgb(190,0,0)';
+            if(cont.invertColors){
+                progress.style.backgroundColor = 'rgb(65,255,255)';
+            }
+            if(cont.displaySepia){
+                progress.style.backgroundColor = 'rgb(112,66,20)';
+            }
+            if(cont.displaySepia && cont.invertColors){
+                progress.style.backgroundColor = 'rgb(72,56,37)';
+            }
+            console.log(progress.style.width);
+            }
 		
 		function requestFullscreen(element) {
 			if (element.requestFullscreen) {

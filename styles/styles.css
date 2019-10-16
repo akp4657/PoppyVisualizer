@@ -52,4 +52,17 @@
   	font-size: 1.2em;
   	width: 6em;
     }
+
+    #progressBar { 
+        margin-top: 0;
+        border:1px solid #aaa;
+        width:295px; 
+        height:20px;
+    }
+    #progress {
+        
+        height:20px;
+        display:inline-block;
+        background-color: red;
+    }
 	</style>
