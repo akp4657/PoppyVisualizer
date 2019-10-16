@@ -57,7 +57,7 @@
             this.circleRadius =1;
             this.detune=1;
             this.frequency=350;
-            this.displayWaveform=false;
+            this.displayWaveform=true;
             this.displayFrequency=false;
             this.displaySepia=false;
             this.displayNoise=false;
@@ -365,6 +365,7 @@
                     //drawCtx.translate(BAR_WIDTH, 0);
                     drawCtx.save();
                     drawCtx.fillRect(barWidth*i+i*PADDING,0,BAR_WIDTH,MAX_BAR_HEIGHT*percent);
+                    
                     drawCtx.restore();
                     //drawCtx.translate(PADDING,0);
                 }
