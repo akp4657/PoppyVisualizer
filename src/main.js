@@ -108,10 +108,7 @@
             this.fullScreen = function()
             {
                 // For some reason, only if the audioElement is full screen, the entire thing goes with it
-                //requestFullscreen(canvasElement);
-                //requestFullscreen(logoCanvasElement);
                 requestFullscreen(audioElement);
-
             }
             
             // Logic for drawing the logo and pausing with datGui
@@ -164,14 +161,7 @@
 			// 1 - The || is because WebAudio has not been standardized across browsers yet
 			const AudioContext = window.AudioContext || window.webkitAudioContext;
 			audioCtx = new AudioContext();
-			
-           
-            let osc = audioCtx.createOscillator();
-            //osc.setPerioditcWave()
-            
-//            osc.frequency.setValueAtTime(440+cont.pitch*100, audioCtx.currentTime); // value in hertz
-//            osc.connect(audioCtx.destination);
-            //osc.start();
+  
 			// 2 - get a reference to the <audio> element on the page
 			audioElement = document.querySelector("audio");
 			audioElement.src = "media/Metal.mp3";
@@ -182,10 +172,7 @@
 			// 4 - create an analyser node
 			analyserNode = audioCtx.createAnalyser();
 			
-            
-            
-//            biquadFilter.connect(analyserNode);
-
+      
 			/*
 			We will request NUM_SAMPLES number of samples or "bins" spaced equally 
 			across the sound spectrum.
@@ -243,7 +230,7 @@
                 
             });
             
-            console.log(poppyLogo);
+            
         }
 
 		
@@ -300,84 +287,6 @@
             audioElement.src="media/"+prop+".mp3";
             pause=true;
         }    
-
-        
-        
-        // Changing the song to work with datGui
-        function changeSong(newSong){
-            console.log("changed song\n new audio src= media/"+cont.song+".mp3");
-            audioElement.src="media/"+newSong+".mp3";
-            pause = true;
-            
-        }
-
-//		function setupUI()
-//        {
-//            console.log("in setup UI");
-//			playButton = document.querySelector("#audioControls");
-//			playButton.onclick= e => {
-//				console.log(`audioCtx.state = ${audioCtx.state}`)};
-
-
-				
-//				// check if context is in suspended state (autoplay policy)
-//				if (audioCtx.state == "suspended") {
-//					audioCtx.resume();
-//				}
-//
-//				if (e.target.dataset.playing == "no") {
-//                    pause = false;
-//					audioElement.play();
-//					e.target.dataset.playing = "yes";
-//				// if track is playing pause it
-//				} else if (e.target.dataset.playing == "yes") {
-//                    pause = true;
-//					audioElement.pause();
-//					e.target.dataset.playing = "no";
-//				}
-                
-//                
-//	
-//			};
-//            
-////            document.querySelector('#sepiaCB').checked = sepia;
-////                document.querySelector('#noiseCB').checked = noise;
-////                document.querySelector('#freqCB').checked = freq;
-////                document.querySelector('#waveformCB').checked = waveform;
-////                
-////                document.querySelector('#sepiaCB').onchange = e => sepia = e.target.checked; document.querySelector('#noiseCB').onchange = e => noise = e.target.checked;
-////                document.querySelector('#freqCB').onchange = e => freq = e.target.checked;
-////                document.querySelector('#waveformCB').onchange = e => waveform = e.target.checked;
-////			
-//			
-//			
-////			
-////			document.querySelector("#songSelect").onchange = e =>{
-////				audioElement.src = e.target.value;
-////				// pause the current track if it is playing
-////				playButton.dispatchEvent(new MouseEvent("click"));
-////			};
-////            
-//			
-//    //			//fullscreen button
-//    //            let fullscreenButton = document.querySelector("#fullscreen");
-//    //            console.log(fullscreenButton)
-//    //            fullscreenButton.onclick = e =>
-//    //            {
-//    //                canvasElement.webkitRequestFullscreen();
-//    //            }
-//    //            
-//            
-//			// if track ends
-//			audioElement.onended =  _ => {
-//				playButton.dataset.playing = "no";
-//			};
-//			
-////			document.querySelector("#fsButton").onclick = _ =>{
-////				requestFullscreen(canvasElement);
-////			};
-//			
-//		}
 		
 		function update() { 
 			// this schedules a call to the update() method in 1/60 seconds
@@ -414,14 +323,7 @@
 			// OR
 			//analyserNode.getByteTimeDomainData(audioData); // waveform data
 			
-            //check song
-//            if(audioElement.src!="media/"+cont.song){
-//                audioElement.src="media/"+cont.song;
-//            }
-            
-            
-
-            
+          
 			// DRAW!
 			drawCtx.clearRect(0,0,800,600);  
 			logoCtx.clearRect(0,0,canvasElement.width,canvasElement.height);
