@@ -87,8 +87,7 @@
             this.ctrlSlider = 0;
             this.volumeSlider = .5;
             this.displayProgress = false;
-            this.displayWaveform=true;
-            this.displayFrequency=false;
+            this.displayWaveform=false;
             this.displaySepia=false;
             this.displayNoise=false;
             this.invertColors=false;
@@ -249,7 +248,6 @@
             folder1.add(cont,"triSize", 1, 100);
             folder1.add(cont,"ctrlSlider",0,200);
             folder1.add(cont,"displayWaveform");
-            folder1.add(cont,"displayFrequency");
             folder1.add(cont,"displaySepia");
             folder1.add(cont,"displayNoise");
             folder1.add(cont,"invertColors");
@@ -279,6 +277,8 @@
         }
     
         
+        // Radio button checks
+        // https://stackoverflow.com/questions/44630700/radio-buttons-with-dat-gui
         function setChecked( prop ){
             for (let param in songs){
                 songs[param] = false;
