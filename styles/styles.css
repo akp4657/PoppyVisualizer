@@ -20,7 +20,8 @@
     #logoCanvas{
         position:absolute;
         z-index: -1;
-        background-color: 'rgba(0,0,0,255)';
+        background-color: transparent;
+        border: none;
     }
 
 	#controls{
@@ -29,6 +30,7 @@
         right:0%;
 		top:90%;
         z-index: 7;
+        border: none;
         
   }
   
