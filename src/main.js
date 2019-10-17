@@ -15,12 +15,7 @@
     //const gui = new dat.GUI();		
 		// SCRIPT SCOPED VARIABLES
 				
-		// 1- here we are faking an enumeration - we'll look at another way to do this soon 
-		const SOUND_PATH = Object.freeze({
-			sound1: "media/Metal.mp3",
-			sound2: "media/Concrete.mp3",
-			sound3: "media/Hard Feelings.mp3"
-		});
+		
 		
 
         const BAR_WIDTH = 1;
@@ -70,6 +65,20 @@
         let freq = false, waveform = false, noise = false, sepia = false, pause = true;
 		
 
+        let songs = {
+            Metal:true,
+            Choke:false,
+            Concrete:false,
+            HardFeelings:false,
+            InAMinute:false,
+            Interweb:false,
+            MyMicrophone:false,
+            MyStyle:false,
+            PlayDestroy:false,
+            ScaryMask:false,
+            Voicemail:false,
+        }
+
         var controls = function(){
             this.circleRadius =0;
 //            this.frequency=350;
@@ -83,6 +92,17 @@
             this.displaySepia=false;
             this.displayNoise=false;
             this.invertColors=false;
+            this.Metal=true;
+            this.Choke=false;
+            this.Concrete=false;
+            this.HardFeelings=false;
+            this.InAMinute=false;
+            this.Interweb=false;
+            this.MyMicrophone=false;
+            this.MyStyle=false;
+            this.PlayDestroy=false;
+            this.ScaryMask=false;
+            this.Voicemail=false;
             this.song='Hard Feelings';
             
             this.fullScreen = function()
@@ -154,7 +174,7 @@
             //osc.start();
 			// 2 - get a reference to the <audio> element on the page
 			audioElement = document.querySelector("audio");
-			audioElement.src = SOUND_PATH.sound3;
+			audioElement.src = "media/Metal.mp3";
 			
 			// 3 - create an a source node that points at the <audio> element
 			sourceNode = audioCtx.createMediaElementSource(audioElement);
@@ -247,17 +267,46 @@
             folder1.add(cont,"displayNoise");
             folder1.add(cont,"invertColors");
             folder1.add(cont,"displayProgress");
+            
             folder3.add(cont,"detune",0,3000);
             folder3.add(cont,"volumeSlider", 0,1);
-            gui.add(cont,"song",['Hard Feelings', 'Concrete', 'Metal']).onChange(changeSong);
+            
+            folder4.add(songs,"Metal").listen().onChange(function(){setChecked("Metal")});
+            folder4.add(songs,"Concrete").listen().onChange(function(){setChecked("Concrete")});
+            
+            folder5.add(songs,"Choke").listen().onChange(function(){setChecked("Choke")});
+            folder5.add(songs,"ScaryMask").listen().onChange(function(){setChecked("ScaryMask")});
+            folder5.add(songs,"Voicemail").listen().onChange(function(){setChecked("Voicemail")});
+            
+            folder6.add(songs,"MyStyle").listen().onChange(function(){setChecked("MyStyle")});
+            folder6.add(songs,"MyMicrophone").listen().onChange(function(){setChecked("MyMicrophone")});
+            folder6.add(songs,"Interweb").listen().onChange(function(){setChecked("Interweb")});
+            
+            folder7.add(songs,"PlayDestroy").listen().onChange(function(){setChecked("PlayDestroy")});
+            folder7.add(songs,"HardFeelings").listen().onChange(function(){setChecked("HardFeelings")});
+            folder7.add(songs,"InAMinute").listen().onChange(function(){setChecked("InAMinute")});
+
+            
             gui.add(cont,"fullScreen");
             gui.add(cont,"play");
         }
+    
+        
+        function setChecked( prop ){
+            for (let param in songs){
+                songs[param] = false;
+            }
+            songs[prop] = true;
+            audioElement.src="media/"+prop+".mp3";
+            pause=true;
+        }    
+
+        
         
         // Changing the song to work with datGui
-        function changeSong(){
+        function changeSong(newSong){
             console.log("changed song\n new audio src= media/"+cont.song+".mp3");
-            audioElement.src="media/"+cont.song+".mp3";
+            audioElement.src="media/"+newSong+".mp3";
             pause = true;
             
         }
