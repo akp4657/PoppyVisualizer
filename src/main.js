@@ -6,7 +6,7 @@
     //Setting up our folder heirarchy
     var folder1 = gui.addFolder('Visuals');
     var folder3 = gui.addFolder('Audio Effects')
-    var folder2 = gui.addFolder('Song Choice');
+    var folder2 = gui.addFolder('Songs');
     var folder4 = folder2.addFolder('Singles');
     var folder5 = folder2.addFolder('Choke');
     var folder6 = folder2.addFolder('Poppy.Computer');
@@ -327,6 +327,9 @@
 			// DRAW!
 			drawCtx.clearRect(0,0,800,600);  
 			logoCtx.clearRect(0,0,canvasElement.width,canvasElement.height);
+            const WIDTH = canvasElement.width;
+            const HEIGHT = canvasElement.height;
+            console.log("WIdht: "+WIDTH+"\nHeight: "+HEIGHT);
             if(!pause)
                 drawLogo();
 			let barWidth = 3;
@@ -366,9 +369,9 @@
                     //first waveform
                     drawCtx.save();
                     drawCtx.translate(canvasElement.width/2,canvasElement.height/3);
-                    drawCtx.translate(0,50-cont.triSize);
+                    drawCtx.translate(0,HEIGHT*0.09-cont.triSize);
                     drawCtx.rotate(60*Math.PI/180);
-                    drawCtx.translate(-30,-15);
+                    drawCtx.translate((WIDTH*-0.05),(HEIGHT*-0.08));
                     drawCtx.scale(((100+cont.triSize)/215),-1);
                     drawCtx.fillRect(barWidth*i+i*PADDING,0,BAR_WIDTH,MAX_BAR_HEIGHT*percent);
                     drawCtx.restore();
@@ -379,7 +382,7 @@
                     drawCtx.translate(canvasElement.width/2-cont.triSize*0.9,canvasElement.height/3+cont.triSize*0.3);
                     drawCtx.scale(1,-1);
                     drawCtx.rotate(-302*Math.PI/180);
-                    drawCtx.translate(-325-(cont.triSize/20),-12);
+                    drawCtx.translate((WIDTH*-0.18)-(cont.triSize/20),(HEIGHT*0.04));
                     drawCtx.scale(((100+cont.triSize)/215),1);
                     drawCtx.fillRect(barWidth*i+i*(PADDING),0,BAR_WIDTH*(1+cont.triSize*0.01),MAX_BAR_HEIGHT*percent);
                     drawCtx.restore();
@@ -388,7 +391,7 @@
                     drawCtx.save();
                     drawCtx.translate(canvasElement.width/2,canvasElement.height/2);
                     drawCtx.rotate(Math.PI);
-                    drawCtx.translate(-160-cont.triSize,-95-cont.triSize*0.5);
+                    drawCtx.translate((WIDTH*-0.125)-cont.triSize,(HEIGHT*-0.156)-cont.triSize*0.5);
                     drawCtx.scale(((100+cont.triSize)/210),-1);
                     
                     drawCtx.fillRect(barWidth*i+i*PADDING,0,BAR_WIDTH,MAX_BAR_HEIGHT*percent);
