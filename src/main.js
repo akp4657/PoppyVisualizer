@@ -1,16 +1,21 @@
     import {drawCircles,drawRectangles,drawTriangle, drawCurves,drawPoppy} from './shapes.js';
     export {init};
     
-   var gui = new dat.GUI();
+    var gui = new dat.GUI();
+
+    //Setting up our folder heirarchy
+    var folder1 = gui.addFolder('Visuals');
+    var folder3 = gui.addFolder('Audio Effects')
+    var folder2 = gui.addFolder('Song Choice');
+    var folder4 = folder2.addFolder('Singles');
+    var folder5 = folder2.addFolder('Choke');
+    var folder6 = folder2.addFolder('Poppy.Computer');
+    var folder7 = folder2.addFolder('Am I a Girl?');
+
     //const gui = new dat.GUI();		
 		// SCRIPT SCOPED VARIABLES
 				
-		// 1- here we are faking an enumeration - we'll look at another way to do this soon 
-		const SOUND_PATH = Object.freeze({
-			sound1: "media/Metal.mp3",
-			sound2: "media/Concrete.mp3",
-			sound3: "media/Hard Feelings.mp3"
-		});
+		
 		
 
         const BAR_WIDTH = 1;
@@ -60,6 +65,20 @@
         let freq = false, waveform = false, noise = false, sepia = false, pause = true;
 		
 
+        let songs = {
+            Metal:true,
+            Choke:false,
+            Concrete:false,
+            HardFeelings:false,
+            InAMinute:false,
+            Interweb:false,
+            MyMicrophone:false,
+            MyStyle:false,
+            PlayDestroy:false,
+            ScaryMask:false,
+            Voicemail:false,
+        }
+
         var controls = function(){
             this.circleRadius =0;
 //            this.frequency=350;
@@ -73,15 +92,23 @@
             this.displaySepia=false;
             this.displayNoise=false;
             this.invertColors=false;
+            this.Metal=true;
+            this.Choke=false;
+            this.Concrete=false;
+            this.HardFeelings=false;
+            this.InAMinute=false;
+            this.Interweb=false;
+            this.MyMicrophone=false;
+            this.MyStyle=false;
+            this.PlayDestroy=false;
+            this.ScaryMask=false;
+            this.Voicemail=false;
             this.song='Hard Feelings';
             
             this.fullScreen = function()
             {
                 // For some reason, only if the audioElement is full screen, the entire thing goes with it
-                //requestFullscreen(canvasElement);
-                //requestFullscreen(logoCanvasElement);
                 requestFullscreen(audioElement);
-
             }
             
             // Logic for drawing the logo and pausing with datGui
@@ -115,7 +142,6 @@
 		
         // Controls for the gui, this allows us to add things to it
         let cont = new controls();
-
 		// FUNCTIONS
 		function init(){
                         console.log("we in init");
@@ -123,6 +149,9 @@
 			setupWebaudio();
 			setupCanvas();
 			//setupUI();
+            
+            
+            
             
 			update();
 		}
@@ -132,17 +161,10 @@
 			// 1 - The || is because WebAudio has not been standardized across browsers yet
 			const AudioContext = window.AudioContext || window.webkitAudioContext;
 			audioCtx = new AudioContext();
-			
-           
-            let osc = audioCtx.createOscillator();
-            //osc.setPerioditcWave()
-            
-//            osc.frequency.setValueAtTime(440+cont.pitch*100, audioCtx.currentTime); // value in hertz
-//            osc.connect(audioCtx.destination);
-            //osc.start();
+  
 			// 2 - get a reference to the <audio> element on the page
 			audioElement = document.querySelector("audio");
-			audioElement.src = SOUND_PATH.sound3;
+			audioElement.src = "media/Metal.mp3";
 			
 			// 3 - create an a source node that points at the <audio> element
 			sourceNode = audioCtx.createMediaElementSource(audioElement);
@@ -150,10 +172,7 @@
 			// 4 - create an analyser node
 			analyserNode = audioCtx.createAnalyser();
 			
-            
-            
-//            biquadFilter.connect(analyserNode);
-
+      
 			/*
 			We will request NUM_SAMPLES number of samples or "bins" spaced equally 
 			across the sound spectrum.
@@ -211,7 +230,7 @@
                 
             });
             
-            console.log(poppyLogo);
+            
         }
 
 		
@@ -226,97 +245,48 @@
 
         window.onload = function(){
             // This adds the sliders and boxes to the datGui itself
-            gui.add(cont,"circleRadius",0,100);
-            gui.add(cont,"detune",0,3000);
-            gui.add(cont,"triSize", 1, 100);
-            gui.add(cont,"ctrlSlider",0,200);
-            gui.add(cont,"volumeSlider", 0,1);
-            gui.add(cont,"displayWaveform");
-            gui.add(cont,"displayFrequency");
-            gui.add(cont,"displaySepia");
-            gui.add(cont,"displayNoise");
-            gui.add(cont,"invertColors");
-            gui.add(cont,"song",['Hard Feelings', 'Concrete', 'Metal']).onChange(changeSong);
+            folder1.add(cont,"circleRadius",0,100);
+            folder1.add(cont,"triSize", 1, 100);
+            folder1.add(cont,"ctrlSlider",0,200);
+            folder1.add(cont,"displayWaveform");
+            folder1.add(cont,"displayFrequency");
+            folder1.add(cont,"displaySepia");
+            folder1.add(cont,"displayNoise");
+            folder1.add(cont,"invertColors");
+            folder1.add(cont,"displayProgress");
+            
+            folder3.add(cont,"detune",0,3000);
+            folder3.add(cont,"volumeSlider", 0,1);
+            
+            folder4.add(songs,"Metal").listen().onChange(function(){setChecked("Metal")});
+            folder4.add(songs,"Concrete").listen().onChange(function(){setChecked("Concrete")});
+            
+            folder5.add(songs,"Choke").listen().onChange(function(){setChecked("Choke")});
+            folder5.add(songs,"ScaryMask").listen().onChange(function(){setChecked("ScaryMask")});
+            folder5.add(songs,"Voicemail").listen().onChange(function(){setChecked("Voicemail")});
+            
+            folder6.add(songs,"MyStyle").listen().onChange(function(){setChecked("MyStyle")});
+            folder6.add(songs,"MyMicrophone").listen().onChange(function(){setChecked("MyMicrophone")});
+            folder6.add(songs,"Interweb").listen().onChange(function(){setChecked("Interweb")});
+            
+            folder7.add(songs,"PlayDestroy").listen().onChange(function(){setChecked("PlayDestroy")});
+            folder7.add(songs,"HardFeelings").listen().onChange(function(){setChecked("HardFeelings")});
+            folder7.add(songs,"InAMinute").listen().onChange(function(){setChecked("InAMinute")});
+
+            
             gui.add(cont,"fullScreen");
-            gui.add(cont,"displayProgress");
             gui.add(cont,"play");
         }
+    
         
-        // Changing the song to work with datGui
-        function changeSong(){
-            console.log("changed song\n new audio src= media/"+cont.song+".mp3");
-            audioElement.src="media/"+cont.song+".mp3";
-            pause = true;
-            
-        }
-
-//		function setupUI()
-//        {
-//            console.log("in setup UI");
-//			playButton = document.querySelector("#audioControls");
-//			playButton.onclick= e => {
-//				console.log(`audioCtx.state = ${audioCtx.state}`)};
-
-
-				
-//				// check if context is in suspended state (autoplay policy)
-//				if (audioCtx.state == "suspended") {
-//					audioCtx.resume();
-//				}
-//
-//				if (e.target.dataset.playing == "no") {
-//                    pause = false;
-//					audioElement.play();
-//					e.target.dataset.playing = "yes";
-//				// if track is playing pause it
-//				} else if (e.target.dataset.playing == "yes") {
-//                    pause = true;
-//					audioElement.pause();
-//					e.target.dataset.playing = "no";
-//				}
-                
-//                
-//	
-//			};
-//            
-////            document.querySelector('#sepiaCB').checked = sepia;
-////                document.querySelector('#noiseCB').checked = noise;
-////                document.querySelector('#freqCB').checked = freq;
-////                document.querySelector('#waveformCB').checked = waveform;
-////                
-////                document.querySelector('#sepiaCB').onchange = e => sepia = e.target.checked; document.querySelector('#noiseCB').onchange = e => noise = e.target.checked;
-////                document.querySelector('#freqCB').onchange = e => freq = e.target.checked;
-////                document.querySelector('#waveformCB').onchange = e => waveform = e.target.checked;
-////			
-//			
-//			
-////			
-////			document.querySelector("#songSelect").onchange = e =>{
-////				audioElement.src = e.target.value;
-////				// pause the current track if it is playing
-////				playButton.dispatchEvent(new MouseEvent("click"));
-////			};
-////            
-//			
-//    //			//fullscreen button
-//    //            let fullscreenButton = document.querySelector("#fullscreen");
-//    //            console.log(fullscreenButton)
-//    //            fullscreenButton.onclick = e =>
-//    //            {
-//    //                canvasElement.webkitRequestFullscreen();
-//    //            }
-//    //            
-//            
-//			// if track ends
-//			audioElement.onended =  _ => {
-//				playButton.dataset.playing = "no";
-//			};
-//			
-////			document.querySelector("#fsButton").onclick = _ =>{
-////				requestFullscreen(canvasElement);
-////			};
-//			
-//		}
+        function setChecked( prop ){
+            for (let param in songs){
+                songs[param] = false;
+            }
+            songs[prop] = true;
+            audioElement.src="media/"+prop+".mp3";
+            pause=true;
+        }    
 		
 		function update() { 
 			// this schedules a call to the update() method in 1/60 seconds
@@ -353,16 +323,12 @@
 			// OR
 			//analyserNode.getByteTimeDomainData(audioData); // waveform data
 			
-            //check song
-//            if(audioElement.src!="media/"+cont.song){
-//                audioElement.src="media/"+cont.song;
-//            }
-            
-            
-
-            
+          
 			// DRAW!
-			//drawCtx.clearRect(0,0,800,600);  
+			drawCtx.clearRect(0,0,800,600);  
+			logoCtx.clearRect(0,0,canvasElement.width,canvasElement.height);
+            if(!pause)
+                drawLogo();
 			let barWidth = 3;
 			let barSpacing = 1;
 			let barHeight = 100;
@@ -392,7 +358,6 @@
                 if(cont.displayWaveform&&!pause)
                 {
                     //canvas waveform stuff here
-                    console.log("hmmm");
                     let percent = audioData[i]/255;
                     percent = percent < 0.02 ? .02 : percent;
                     //drawCtx.translate(BAR_WIDTH, 0);
@@ -465,7 +430,7 @@
             let logoImgData;
             let logoData;
             
-            if(cont.displaySepia)
+            if(!pause)
             {
                 logoImgData = logoCtx.getImageData(0,0,logoCtx.canvas.width,logoCtx.canvas.height);
                 logoData = logoImgData.data;
@@ -495,6 +460,16 @@
                     data[i] = 255 - red;
                     data[i+1] = 255 - green;
                     data[i+2] = 255 - blue;
+                    
+                    if(!pause)
+                        {
+                            let lRed = logoData[i], lGreen = logoData[i+1], lBlue = logoData[i+2];
+
+                            
+                            logoData[i] = 255- lRed;
+                            logoData[i+1] = 255-lGreen;
+                            logoData[i+2] = 255 - lBlue;
+                        }
                 }
                 
                 // 33 - Noise 
@@ -539,7 +514,7 @@
             
             // 32 - Put the modified data back on the canvas 
             ctx.putImageData(imageData, 0, 0);
-            if(cont.displaySepia&&!pause)
+            if(!pause)
                 logoCtx.putImageData(logoImgData,0,0);
         }
 
@@ -567,6 +542,21 @@
             }
             }
 		
+        //update logo layer
+        function updateLogo() {
+            
+            if(cont.invertColors){
+                                
+            }
+            if(cont.displaySepia){
+                
+            }
+            if(cont.displaySepia && cont.invertColors){
+                
+            }
+            
+        }
+
 		function requestFullscreen(element) {
 			if (element.requestFullscreen) {
 			  element.requestFullscreen();
