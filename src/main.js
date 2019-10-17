@@ -542,20 +542,7 @@
             }
             }
 		
-        //update logo layer
-        function updateLogo() {
-            
-            if(cont.invertColors){
-                                
-            }
-            if(cont.displaySepia){
-                
-            }
-            if(cont.displaySepia && cont.invertColors){
-                
-            }
-            
-        }
+     
 
 		function requestFullscreen(element) {
 			if (element.requestFullscreen) {
