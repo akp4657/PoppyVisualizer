@@ -368,10 +368,10 @@
                     
                     //first waveform
                     drawCtx.save();
-                    drawCtx.translate(canvasElement.width/2,canvasElement.height/3);
-                    drawCtx.translate(0,HEIGHT*0.09-cont.triSize);
+                    drawCtx.translate(canvasElement.width/2,canvasElement.height/2);
+                    //drawCtx.translate(0,HEIGHT*0.09-cont.triSize);
                     drawCtx.rotate(60*Math.PI/180);
-                    drawCtx.translate((WIDTH*-0.05),(HEIGHT*-0.08));
+                    drawCtx.translate(0-(barWidth*NUM_SAMPLES+PADDING*NUM_SAMPLES)/10,(HEIGHT*-0.08)-cont.triSize);
                     drawCtx.scale(((100+cont.triSize)/215),-1);
                     drawCtx.fillRect(barWidth*i+i*PADDING,0,BAR_WIDTH,MAX_BAR_HEIGHT*percent);
                     drawCtx.restore();
@@ -379,10 +379,10 @@
                     
                     //second waveform
                     drawCtx.save();
-                    drawCtx.translate(canvasElement.width/2-cont.triSize*0.9,canvasElement.height/3+cont.triSize*0.3);
+                    drawCtx.translate(canvasElement.width/2,canvasElement.height/2);
                     drawCtx.scale(1,-1);
                     drawCtx.rotate(-302*Math.PI/180);
-                    drawCtx.translate((WIDTH*-0.18)-(cont.triSize/20),(HEIGHT*0.04));
+                     drawCtx.translate(0-(barWidth*NUM_SAMPLES+PADDING*NUM_SAMPLES)/10,(HEIGHT*-0.08)-cont.triSize);
                     drawCtx.scale(((100+cont.triSize)/215),1);
                     drawCtx.fillRect(barWidth*i+i*(PADDING),0,BAR_WIDTH*(1+cont.triSize*0.01),MAX_BAR_HEIGHT*percent);
                     drawCtx.restore();
@@ -391,7 +391,7 @@
                     drawCtx.save();
                     drawCtx.translate(canvasElement.width/2,canvasElement.height/2);
                     drawCtx.rotate(Math.PI);
-                    drawCtx.translate((WIDTH*-0.125)-cont.triSize,(HEIGHT*-0.156)-cont.triSize*0.5);
+                     drawCtx.translate(0-(barWidth*NUM_SAMPLES+PADDING*NUM_SAMPLES)/10,(HEIGHT*-0.08)-cont.triSize);
                     drawCtx.scale(((100+cont.triSize)/210),-1);
                     
                     drawCtx.fillRect(barWidth*i+i*PADDING,0,BAR_WIDTH,MAX_BAR_HEIGHT*percent);
